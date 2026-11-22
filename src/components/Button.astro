@@ -1,0 +1,30 @@
+---
+interface Props { href: string; variant?: "primary" | "secondary"; }
+const { href, variant = "primary" } = Astro.props;
+---
+<a class={`btn btn--${variant}`} href={href}>
+  <span class="btn__label"><slot /></span>
+  <span class="btn__icon" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+</a>
+<style>
+  .btn {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 9px 11px 9px 22px;
+    border-radius: var(--radio-pildora);
+    font-family: var(--font-texto); font-weight: 700; font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn__icon {
+    display: grid; place-items: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  .btn:hover .btn__icon { transform: translateX(3px); }
+  .btn--primary { background: var(--violeta); color: #fff; }
+  .btn--primary .btn__icon { background: #fff; color: var(--violeta); }
+  .btn--secondary { background: #fff; color: var(--noche); }
+  .btn--secondary .btn__icon { background: var(--violeta); color: #fff; }
+</style>

@@ -1,0 +1,56 @@
+---
+import Button from "./Button.astro";
+import { nav, ctaLabel } from "../content";
+---
+<header class="nav">
+  <div class="container nav__bar">
+    <a class="nav__brand" href="#top" aria-label="Synapxix, inicio">
+      <img src="/logo-azul.png" alt="" width="44" height="44" />
+      <span>Synapxix</span>
+    </a>
+    <nav class="nav__links" aria-label="Principal">
+      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <div class="nav__cta"><Button href="#contacto">{ctaLabel}</Button></div>
+    <button class="nav__toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-movil">
+      <span></span><span></span>
+    </button>
+  </div>
+  <div class="nav__mobile" id="menu-movil" hidden>
+    {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+    <Button href="#contacto">{ctaLabel}</Button>
+  </div>
+</header>
+<style>
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(246, 247, 255, 0.88); backdrop-filter: blur(10px); }
+  .nav__bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 72px; }
+  .nav__brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-titulo); font-weight: 700; font-size: 1.375rem; }
+  .nav__links { display: none; gap: 32px; font-weight: 600; }
+  .nav__links a:hover { color: var(--violeta); }
+  .nav__cta { display: none; }
+  .nav__toggle { display: grid; gap: 6px; width: 44px; height: 44px; place-content: center; background: #fff; border: 0; border-radius: 12px; cursor: pointer; }
+  .nav__toggle span { display: block; width: 20px; height: 2px; background: var(--noche); }
+  .nav__mobile { display: grid; gap: 4px; padding: 8px 20px 24px; }
+  .nav__mobile[hidden] { display: none; }
+  .nav__mobile a:not(.btn) { padding: 12px 0; font-weight: 600; border-bottom: 1px solid var(--linea); }
+  .nav__mobile :global(.btn) { margin-top: 16px; justify-self: start; }
+  @media (min-width: 960px) {
+    .nav__links, .nav__cta { display: flex; }
+    .nav__toggle, .nav__mobile { display: none; }
+  }
+</style>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".nav__toggle");
+  const menu = document.getElementById("menu-movil");
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    menu?.toggleAttribute("hidden", open);
+  });
+  menu?.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => {
+      toggle?.setAttribute("aria-expanded", "false");
+      menu.setAttribute("hidden", "");
+    })
+  );
+</script>

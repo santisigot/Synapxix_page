@@ -1,0 +1,33 @@
+---
+import { nav } from "../content";
+import { CONTACT_EMAIL } from "../config";
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a class="footer__logo" href="#top"><img src="/logo-claro.png" alt="" width="48" height="48" /><span>Synapxix</span></a>
+      <p>Educación personalizada para el desarrollo infantil, con juego e inteligencia artificial.</p>
+    </div>
+    <nav class="footer__links" aria-label="Pie">
+      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="footer__contact">
+      <span>Escribinos</span>
+      <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+    </div>
+  </div>
+  <div class="container footer__legal">© 2026 Synapxix. Todos los derechos reservados.</div>
+</footer>
+<style>
+  .footer { background: var(--noche); color: #fff; padding: 72px 0 32px; }
+  .footer__grid { display: grid; gap: 40px; }
+  .footer__logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-titulo); font-weight: 700; font-size: 1.5rem; margin-bottom: 16px; }
+  .footer__brand p { max-width: 380px; color: rgba(255, 255, 255, 0.75); }
+  .footer__links { display: grid; gap: 12px; align-content: start; font-weight: 600; }
+  .footer__links a:hover, .footer__contact a:hover { color: var(--cielo); }
+  .footer__contact { display: grid; gap: 8px; align-content: start; }
+  .footer__contact span { color: rgba(255, 255, 255, 0.6); }
+  .footer__legal { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; }
+  @media (min-width: 860px) { .footer__grid { grid-template-columns: 2fr 1fr 1fr; } }
+</style>
