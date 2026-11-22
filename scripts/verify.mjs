@@ -30,11 +30,18 @@ check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul romp
 check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
 if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
 // Efecto de palabras que se asientan en los títulos de sección
-// 22 tarjetas con efecto: 3 Gusto/Interés/Nivel + 3 Por qué + 4 Pilares + 4 Docentes + 8 Respaldo
-check((html.match(/class="split"/g) ?? []).length === 51, 'deben animarse 51 textos con SplitText: 7 títulos de sección + título y texto de las 22 tarjetas');
-check((html.match(/<(?:div|li)[^>]*\sdata-tilt[\s>]/g) ?? []).length === 22, 'las 22 tarjetas deben ser inclinables (data-tilt)');
-check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 22, 'las 22 tarjetas deben entrar con el efecto "settle" (como el texto)');
-check(!/(triad__card|why__card|pillar |benefit |backer )[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
+// 18 tarjetas con efecto: 3 Gusto/Interés/Nivel + 3 Por qué + 4 Docentes + 8 Respaldo (los Pilares usan el carrusel 3D)
+check((html.match(/class="split"/g) ?? []).length === 43, 'deben animarse 43 textos con SplitText: 7 títulos de sección + título y texto de las 18 tarjetas');
+check((html.match(/<(?:div|li)[^>]*\sdata-tilt[\s>]/g) ?? []).length === 18, 'las 18 tarjetas deben ser inclinables (data-tilt)');
+check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 18, 'las 18 tarjetas deben entrar con el efecto "settle" (como el texto)');
+// Pilares: carrusel 3D curvo controlado por el scroll (WebGL), con listado accesible de respaldo
+check(/<section[^>]*\sdata-pillars[\s>]/.test(html) && /<canvas[^>]*class="pillars__canvas"/.test(html), 'la sección de pilares debe tener el escenario con el canvas del carrusel 3D');
+check((html.match(/<article[^>]*\sdata-pillar[\s>]/g) ?? []).length === 4, 'los 4 pilares deben seguir en el HTML como listado accesible (respaldo sin WebGL)');
+check(plano0().includes('Deslizá o arrastrá para explorar'), 'debe verse la pista "Deslizá o arrastrá para explorar"');
+check(!html.includes('WebGLRenderer'), 'three.js no debe cargarse en la página inicial (solo bajo demanda, en un archivo aparte)');
+check(existsSync('dist/_astro') && readdirSync('dist/_astro').some((f) => f.endsWith('.js') && readFileSync(`dist/_astro/${f}`, 'utf8').includes('WebGLRenderer')), 'three.js debe empaquetarse como archivo aparte');
+function plano0() { return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '); }
+check(!/(triad__card|why__card|benefit |backer )[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
 check(!/why__card--violeta[^{]*\{[^}]*background:\s*var\(--violeta\)\s*[;}]/.test(html + (existsSync('dist/_astro') ? readdirSync('dist/_astro').filter((f) => f.endsWith('.css')).map((f) => readFileSync(`dist/_astro/${f}`, 'utf8')).join('') : '')), 'la tarjeta "Un docente decide" no debe ser violeta sólido (desentona con las otras, que son tonos suaves)');
 {
   const h1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? [])[1] ?? '';
