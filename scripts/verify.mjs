@@ -28,7 +28,7 @@ check(has('id="pilares"'), 'falta id="pilares"');
 check(has('Un docente decide'), 'falta "Un docente decide"');
 {
   const pasos = ['Evidencia', 'Estado', 'Decisión', 'Intervención', 'Resultado', 'Actualización'];
-  const pos = pasos.map((p) => html.indexOf(`<span class="dala__label">${p}</span>`));
+  const pos = pasos.map((p) => html.search(new RegExp(`<span class="dala__label"[^>]*>${p}</span>`)));
   check(pos.every((p, i) => p >= 0 && (i === 0 || p > pos[i - 1])), 'los 6 pasos de D.A.L.A. faltan o están desordenados');
 }
 
