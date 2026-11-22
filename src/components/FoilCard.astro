@@ -1,9 +1,11 @@
 ---
 // Tarjeta "foil" 2.5D con el logo: inclinación en perspectiva + brillo reflectante que sigue al puntero.
 // Es CSS + variables controladas por pointer events (sin Three.js ni video). Se usa en el hero y en el contacto.
+interface Props { tono?: "noche" | "violeta"; }
+const { tono = "noche" } = Astro.props;
 const destellos = ["hspark--1", "hspark--2", "hspark--3", "hspark--4", "hspark--5"];
 ---
-<div class="hstage">
+<div class={`hstage hstage--${tono}`}>
   <span class="hstage__ring hstage__ring--1" aria-hidden="true"></span>
   <span class="hstage__ring hstage__ring--2" aria-hidden="true"></span>
   <span class="hstage__orbit" aria-hidden="true"></span>
@@ -62,7 +64,8 @@ const destellos = ["hspark--1", "hspark--2", "hspark--3", "hspark--4", "hspark--
   .hspark--5 { --z: 9px; --c: var(--cielo); --px: -10px; --py: 20px; left: 46%; top: 0%; animation-delay: -0.7s; }
 
   /* Perspectiva 1500px, una tarjeta 2:3 con cara recortada al 4% */
-  .hcard__persp { position: relative; z-index: 2; perspective: 1500px; width: min(300px, 66vw); }
+  /* Más grande (hasta 350px), pero sin pasar de la altura de la pantalla: la tarjeta mide 1.5 veces su ancho. */
+  .hcard__persp { position: relative; z-index: 2; perspective: 1500px; width: clamp(250px, min(74vw, calc((100svh - 240px) / 1.5)), 350px); }
   .hcard {
     position: relative; aspect-ratio: 2 / 3; width: 100%; border-radius: 4%; cursor: grab; touch-action: pan-y;
     transform: translateZ(var(--tz)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s));
@@ -78,8 +81,14 @@ const destellos = ["hspark--1", "hspark--2", "hspark--3", "hspark--4", "hspark--
   .hcard__circle { left: 50%; top: 40%; translate: -50% -50%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.12); aspect-ratio: 1; }
   .hcard__circle--1 { width: 98%; }
   .hcard__circle--2 { width: 74%; border-color: rgba(85, 193, 255, 0.28); }
-  .hcard__logo { left: 50%; top: 40%; translate: -50% -50%; width: 80%; height: auto; filter: drop-shadow(0 0 26px rgba(113, 90, 255, 0.6)); user-select: none; -webkit-user-drag: none; pointer-events: none; }
+  .hcard__logo { left: 50%; top: 40%; translate: -50% -50%; width: 84%; height: auto; filter: drop-shadow(0 0 26px rgba(113, 90, 255, 0.6)); user-select: none; -webkit-user-drag: none; pointer-events: none; }
   .hcard__word { left: 0; right: 0; bottom: 6%; text-align: center; font-family: var(--font-titulo); font-weight: 700; font-size: 13.5cqw; letter-spacing: -0.02em; color: #fff; }
+
+  /* Variante violeta (para fondos violeta): misma tarjeta, colores de la misma familia que la sección. */
+  .hstage--violeta .hcard__bg { background: radial-gradient(120% 80% at 50% 28%, #9b89ff 0%, #6a53f2 38%, #34269f 100%); }
+  .hstage--violeta .hcard__circle { border-color: rgba(255, 255, 255, 0.22); }
+  .hstage--violeta .hcard__circle--2 { border-color: rgba(255, 255, 255, 0.38); }
+  .hstage--violeta .hcard__logo { filter: drop-shadow(0 0 26px rgba(16, 46, 74, 0.45)); }
 
   /* Capas de brillo independientes de la imagen; la tipografía queda debajo, así el foil la cruza */
   .hcard__foil {

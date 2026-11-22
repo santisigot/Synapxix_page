@@ -41,6 +41,7 @@ check((html.match(/class="split"/g) ?? []).length === 7, 'deben animarse exactam
 // Hero: tarjeta foil 2.5D con el logo
 check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 2, 'debe haber 2 tarjetas interactivas: una en el hero y otra en el contacto');
 check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 2, 'cada tarjeta debe exponer una descripción accesible');
+check(has('hstage--noche') && has('hstage--violeta'), 'la tarjeta del hero debe ser azul noche y la del contacto violeta (que combine con su fondo)');
 check(!has('hchip'), 'las etiquetas flotantes (Gusto, Interés, Nivel) deben haberse quitado');
 check((html.match(/class="hspark/g) ?? []).length >= 3, 'debe haber destellos sutiles alrededor de la tarjeta');
 check(!has('hero__card') && !has('contact__art'), 'las ilustraciones estáticas anteriores deben haberse reemplazado');
