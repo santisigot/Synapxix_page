@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import SplitText from "./SplitText.astro";
 import { contact } from "../content";
 import { CONTACT_EMAIL } from "../config";
 const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
@@ -12,15 +13,15 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
   </div>
 
   <div class="container contact__grid">
-    <div class="contact__copy reveal">
-      <span class="contact__eyebrow">{contact.eyebrow}</span>
-      <h2>{contact.title}</h2>
-      <p>{contact.text}</p>
-      <div class="contact__actions">
+    <div class="contact__copy">
+      <span class="contact__eyebrow reveal">{contact.eyebrow}</span>
+      <h2><SplitText text={contact.title} /></h2>
+      <p class="reveal">{contact.text}</p>
+      <div class="contact__actions reveal">
         <Button href={`mailto:${CONTACT_EMAIL}?subject=${asunto}`}>{contact.button}</Button>
         <a class="contact__mail" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </div>
-      <ul class="contact__chips">
+      <ul class="contact__chips reveal">
         {contact.chips.map((c) => <li class="contact__chip">{c}</li>)}
       </ul>
     </div>

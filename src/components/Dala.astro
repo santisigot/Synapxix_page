@@ -1,5 +1,6 @@
 ---
 import { dala, dalaSteps } from "../content";
+import SplitText from "./SplitText.astro";
 ---
 <section class="dala" id="como-funciona">
   <div class="dala__bg" aria-hidden="true">
@@ -9,10 +10,10 @@ import { dala, dalaSteps } from "../content";
     <span class="dala__grid"></span>
   </div>
   <div class="container dala__inner">
-    <div class="dala__head reveal">
-      <span class="eyebrow">{dala.eyebrow}</span>
-      <h2>{dala.title}</h2>
-      <p>{dala.text}</p>
+    <div class="dala__head">
+      <span class="eyebrow reveal">{dala.eyebrow}</span>
+      <h2><SplitText text={dala.title} /></h2>
+      <p class="reveal">{dala.text}</p>
     </div>
     <ol class="dala__steps">
       {dalaSteps.map((s, i) => (

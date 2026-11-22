@@ -1,12 +1,13 @@
 ---
 import { backers, backersIntro } from "../content";
+import SplitText from "./SplitText.astro";
 const tonos = ["cielo", "lavanda", "violeta"];
 ---
 <section class="section backers" id="respaldo">
   <div class="container">
-    <div class="backers__head reveal">
-      <span class="eyebrow">{backersIntro.eyebrow}</span>
-      <h2>{backersIntro.title}</h2>
+    <div class="backers__head">
+      <span class="eyebrow reveal">{backersIntro.eyebrow}</span>
+      <h2><SplitText text={backersIntro.title} /></h2>
     </div>
     <ul class="backers__grid">
       {backers.map((b, i) => (

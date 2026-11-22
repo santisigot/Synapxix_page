@@ -1,14 +1,15 @@
 ---
 import { about, counters, triad } from "../content";
+import SplitText from "./SplitText.astro";
 const tonos = ["cielo", "lavanda", "violeta"];
 ---
 <section class="section about" id="proyecto">
   <div class="container">
     <div class="about__top">
-      <div class="reveal">
-        <span class="eyebrow">Sobre Synapxix</span>
-        <h2>{about.title}</h2>
-        <p class="about__text">{about.text}</p>
+      <div>
+        <span class="eyebrow reveal">Sobre Synapxix</span>
+        <h2><SplitText text={about.title} /></h2>
+        <p class="about__text reveal">{about.text}</p>
       </div>
       <dl class="about__counters reveal">
         {counters.map((c) => (

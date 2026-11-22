@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import SplitText from "./SplitText.astro";
 import { teachers, teacherBenefits, ctaLabel } from "../content";
 const icons = {
   chart: "M4 20V10M10 20V4M16 20v-7M22 20H2",
@@ -10,12 +11,12 @@ const icons = {
 ---
 <section class="section teachers">
   <div class="container">
-    <div class="teachers__top reveal">
+    <div class="teachers__top">
       <div>
-        <span class="eyebrow">{teachers.eyebrow}</span>
-        <h2>{teachers.title}</h2>
+        <span class="eyebrow reveal">{teachers.eyebrow}</span>
+        <h2><SplitText text={teachers.title} /></h2>
       </div>
-      <div class="teachers__side">
+      <div class="teachers__side reveal">
         <p>{teachers.text}</p>
         <Button href="#contacto">{ctaLabel}</Button>
       </div>

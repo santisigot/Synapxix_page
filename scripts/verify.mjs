@@ -29,6 +29,15 @@ check((html.match(/class="marquee__group/g) ?? []).length >= 4, 'la banda necesi
 check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul rompe la regla de contraste');
 check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
 if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
+// Efecto de palabras que se asientan en los títulos de sección
+check((html.match(/class="split"/g) ?? []).length === 7, 'deben animarse exactamente los 7 títulos de sección con SplitText');
+{
+  const h1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? [])[1] ?? '';
+  check(h1.length > 0 && !h1.includes('split'), 'el título del hero no debe usar SplitText');
+  const h2s = [...html.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => m[1]);
+  const texto = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  check(h2s.some((s) => texto(s) === 'El momento de sumar la IA a la educación'), 'el título dividido debe conservar el texto completo y legible');
+}
 // T5: docentes, respaldo, contacto
 for (const a of ['respaldo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);
 for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'UADER', 'UTN', 'Polo Tecnológico La Nube'])

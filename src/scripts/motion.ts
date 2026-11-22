@@ -1,6 +1,7 @@
 export function initMotion(): void {
   const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const reveals = document.querySelectorAll<HTMLElement>(".reveal");
+  // `.reveal` = fundido de bloques; `.split` = palabras de los títulos que se asientan.
+  const reveals = document.querySelectorAll<HTMLElement>(".reveal, .split");
   const contadores = document.querySelectorAll<HTMLElement>(".counter__num[data-target]");
 
   // Sin movimiento o sin IntersectionObserver: todo visible y con el valor final.

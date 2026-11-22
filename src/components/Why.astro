@@ -1,16 +1,17 @@
 ---
 import Button from "./Button.astro";
+import SplitText from "./SplitText.astro";
 import { why, principles } from "../content";
 const tonos = ["cielo", "lavanda", "violeta"];
 ---
 <section class="section why">
   <div class="container">
-    <div class="why__top reveal">
+    <div class="why__top">
       <div>
-        <span class="eyebrow">{why.eyebrow}</span>
-        <h2>{why.title}</h2>
+        <span class="eyebrow reveal">{why.eyebrow}</span>
+        <h2><SplitText text={why.title} /></h2>
       </div>
-      <div class="why__side">
+      <div class="why__side reveal">
         <p>{why.text}</p>
         <Button href="#contacto">Hablemos</Button>
       </div>
