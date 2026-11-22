@@ -30,10 +30,10 @@ check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul romp
 check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
 if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
 // Efecto de palabras que se asientan en los títulos de sección
-check((html.match(/class="split"/g) ?? []).length === 13, 'deben animarse 13 textos con SplitText: 7 títulos de sección + título y texto de las 3 tarjetas');
-check((html.match(/<div[^>]*\sdata-tilt[\s>]/g) ?? []).length === 3, 'las 3 tarjetas (Gusto, Interés, Nivel) deben ser inclinables (data-tilt)');
-check((html.match(/<div[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 3, 'las 3 tarjetas deben entrar con el efecto "settle" (como el texto)');
-check(!/triad__card[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
+check((html.match(/class="split"/g) ?? []).length === 19, 'deben animarse 19 textos con SplitText: 7 títulos de sección + título y texto de las 6 tarjetas');
+check((html.match(/<div[^>]*\sdata-tilt[\s>]/g) ?? []).length === 6, 'las 6 tarjetas (Gusto/Interés/Nivel y Todo es trazable/Privacidad/Un docente decide) deben ser inclinables (data-tilt)');
+check((html.match(/<div[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 6, 'las 6 tarjetas deben entrar con el efecto "settle" (como el texto)');
+check(!/(triad__card|why__card)[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
 {
   const h1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? [])[1] ?? '';
   check(h1.length > 0 && !h1.includes('split'), 'el título del hero no debe usar SplitText');
@@ -67,6 +67,10 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
   check(!/clamp\(0px,\s*1\.5vw,\s*20px\)/.test(html + css), 'D.A.L.A. y contacto deben llegar hasta los bordes (sin margen lateral)');
   check(!/\.contact\{[^}]*border-radius/.test(html + css), 'el contacto no debe tener esquinas redondeadas');
   check(has('contact__chip'), 'el contacto debe incluir los distintivos (chips)');
+  // Texto nítido: la tarjeta inclinable no puede usar will-change, filter ni scale() (ablandan el texto al animarse).
+  const tilt = (html + css).match(/\.tilt__card[^{]*\{[^}]*\}/g) ?? [];
+  check(tilt.length > 0, 'debe existir el estilo compartido .tilt__card');
+  check(!tilt.some((r) => /will-change|filter:|scale\(/.test(r)), '.tilt__card no debe usar will-change, filter ni scale() (el texto se ve borroso)');
   check((`${html}${css}`.match(/min-height:\s*100svh/g) ?? []).length >= 2, 'el hero y el contacto deben ocupar toda la pantalla (min-height: 100svh)');
   check((html.match(/class="(?:[^"]*\s)?divider(?:\s[^"]*)?"/g) ?? []).length === 3, 'deben verse 3 separadores entre secciones de fondo claro contiguas');
 }

@@ -35,7 +35,9 @@ const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
     <Footer />
     <script>
       import { initMotion } from "../scripts/motion";
+      import { initTilt } from "../scripts/tilt";
       initMotion();
+      initTilt();
     </script>
   </body>
 </html>

@@ -18,10 +18,12 @@ const tonos = ["cielo", "lavanda", "violeta"];
     </div>
     <div class="why__cards">
       {principles.map((p, i) => (
-        <article class={`why__card why__card--${tonos[i]} reveal`}>
-          <h3>{p.title}</h3>
-          <p>{p.text}</p>
-        </article>
+        <div class="tilt settle" data-tilt style={`--k:${i}`}>
+          <article class={`why__card tilt__card why__card--${tonos[i]}`}>
+            <h3><SplitText text={p.title} delay={320 + i * 150} /></h3>
+            <p><SplitText text={p.text} delay={420 + i * 150} /></p>
+          </article>
+        </div>
       ))}
     </div>
   </div>

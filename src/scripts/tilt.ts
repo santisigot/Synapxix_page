@@ -1,24 +1,32 @@
 // Inclinación 2.5D de las tarjetas [data-tilt] con el mouse (o arrastre táctil), sin reflejos.
 // Misma mecánica que la tarjeta del hero: el tilt se normaliza por el tamaño del viewport,
 // las variables CSS se escriben directo y la transición del transform interpola.
+// Cada sección con tarjetas inclinables es un grupo independiente (se mueven con el mouse dentro de su sección).
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
 export function initTilt(): void {
-  const raiz = document.querySelector<HTMLElement>(".about");
-  const items = [...document.querySelectorAll<HTMLElement>("[data-tilt]")];
-  if (!raiz || items.length === 0) return;
   // Con "reducir movimiento" las tarjetas quedan quietas.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+  const grupos = new Map<HTMLElement, HTMLElement[]>();
+  document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
+    const seccion = el.closest<HTMLElement>("section");
+    if (!seccion) return;
+    grupos.set(seccion, [...(grupos.get(seccion) ?? []), el]);
+  });
+  grupos.forEach((items, raiz) => montar(raiz, items));
+}
+
+function montar(raiz: HTMLElement, items: HTMLElement[]): void {
   const ac = new AbortController();
   const opt = { signal: ac.signal };
 
+  // Solo rotación y un pequeño desplazamiento vertical (sin escala ni profundidad) para que el texto no se ablande.
   const aplicar = (el: HTMLElement, x: number, y: number, hover: number) => {
     const s = el.style;
     s.setProperty("--ry", `${(13 * x).toFixed(2)}deg`);
     s.setProperty("--rx", `${(-9 * y).toFixed(2)}deg`);
-    s.setProperty("--tz", `${(30 * hover).toFixed(1)}px`);
-    s.setProperty("--s", (1 + 0.03 * hover).toFixed(3));
+    s.setProperty("--lift", `${(-8 * hover).toFixed(1)}px`);
     s.setProperty("--hover", hover.toFixed(3));
   };
   const reposoTodas = () => items.forEach((el) => aplicar(el, 0, 0, 0));
