@@ -57,8 +57,12 @@ check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 2, 'debe 
 check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 2, 'cada tarjeta debe exponer una descripción accesible');
 check(has('hstage--noche') && has('hstage--violeta'), 'la tarjeta del hero debe ser azul noche y la del contacto violeta (que combine con su fondo)');
 check(has('dataset.tone') && (html.match(/<section[^>]*\sdata-nav="/g) ?? []).length === 2, 'la barra debe tomar el color de D.A.L.A. (noche) y del contacto (violeta): 2 secciones con data-nav');
-check((html.match(/class="dala__sum"/g) ?? []).length === 6, 'cada uno de los 6 pasos de D.A.L.A. debe tener su resumen');
-check((html.match(/<li[^>]*class="dala__step[^"]*"[^>]*tabindex="0"/g) ?? []).length === 6, 'los 6 pasos deben poder enfocarse con teclado (tabindex=0) para ver su resumen');
+// D.A.L.A.: 6 filas desplegables nativas (<details>/<summary>), con respuesta animada por script
+check((html.match(/<details[^>]*class="dala__row[^"]*"/g) ?? []).length === 6, 'los 6 pasos de D.A.L.A. deben ser filas <details> nativas');
+check((html.match(/<summary[^>]*class="dala__sum"/g) ?? []).length === 6, 'cada fila debe tener su <summary> nativo (accesible con Enter/Espacio)');
+check((html.match(/class="dala__answer"/g) ?? []).length === 6, 'cada fila debe tener su resumen/respuesta');
+check((html.match(/<details[^>]*class="dala__row[^"]*"[^>]*\sopen[\s>]/g) ?? []).length === 1, 'solo la primera fila debe venir abierta');
+check(!html.includes('dala__step'), 'las tarjetas/línea de tiempo anteriores deben haberse reemplazado');
 check(!has('hchip'), 'las etiquetas flotantes (Gusto, Interés, Nivel) deben haberse quitado');
 check((html.match(/class="hspark/g) ?? []).length >= 3, 'debe haber destellos sutiles alrededor de la tarjeta');
 check(!has('hero__card') && !has('contact__art'), 'las ilustraciones estáticas anteriores deben haberse reemplazado');

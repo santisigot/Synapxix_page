@@ -2,7 +2,7 @@
 import { dala, dalaSteps } from "../content";
 import SplitText from "./SplitText.astro";
 ---
-<section class="dala" id="como-funciona" data-nav="noche">
+<section class="dala" id="como-funciona" data-nav="noche" data-dala>
   <div class="dala__bg" aria-hidden="true">
     <span class="dala__glow dala__glow--a"></span>
     <span class="dala__glow dala__glow--b"></span>
@@ -10,28 +10,33 @@ import SplitText from "./SplitText.astro";
     <span class="dala__grid"></span>
   </div>
   <div class="container dala__inner">
-    <div class="dala__head">
-      <span class="eyebrow reveal">{dala.eyebrow}</span>
-      <h2><SplitText text={dala.title} /></h2>
-      <p class="reveal">{dala.text}</p>
+    <div class="dala__top">
+      <div class="dala__head">
+        <span class="eyebrow reveal">{dala.eyebrow}</span>
+        <h2><SplitText text={dala.title} /></h2>
+      </div>
+      <p class="dala__intro reveal">{dala.text}</p>
     </div>
-    <ol class="dala__steps">
+
+    <!-- Filas desplegables nativas: sin JavaScript abren y cierran igual (details/summary). El script solo anima la altura. -->
+    <div class="dala__list">
       {dalaSteps.map((s, i) => (
-        <li class="dala__step reveal" tabindex="0">
-          <div class="dala__card">
+        <details class="dala__row reveal" open={i === 0}>
+          <summary class="dala__sum">
             <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
             <span class="dala__label">{s.name}</span>
-            <div class="dala__sum"><p>{s.text}</p></div>
-          </div>
-        </li>
+            <span class="dala__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="dala__answer"><p>{s.text}</p></div>
+        </details>
       ))}
-    </ol>
+    </div>
   </div>
 </section>
 <style>
   /* Como el hero y el contacto: ocupa toda la pantalla al llegar (el margen negativo anula el scroll-padding de la barra). */
   /* overflow: clip (no hidden): los brillos se salen de la caja y, con hidden, el navegador puede desplazar la sección por dentro al enfocar algo. */
-  .dala { position: relative; overflow: hidden; overflow: clip; color: #fff; display: grid; align-content: center; min-height: 100vh; min-height: 100svh; scroll-margin-top: -88px; padding: 120px 0 72px; background: linear-gradient(160deg, #0d2740 0%, var(--noche) 45%, #1a2f66 100%); }
+  .dala { position: relative; overflow: hidden; overflow: clip; color: #fff; display: grid; align-content: center; min-height: 100vh; min-height: 100svh; scroll-margin-top: -88px; padding: 108px 0 48px; background: linear-gradient(160deg, #0d2740 0%, var(--noche) 45%, #1a2f66 100%); }
   .dala__bg { position: absolute; inset: 0; pointer-events: none; }
   .dala__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
   .dala__glow--a { width: 520px; height: 520px; background: var(--violeta); opacity: 0.45; top: -180px; right: -120px; }
@@ -39,37 +44,43 @@ import SplitText from "./SplitText.astro";
   .dala__glow--c { width: 300px; height: 300px; background: var(--cielo); opacity: 0.18; top: 40%; left: 42%; }
   .dala__grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent); }
   .dala .eyebrow { color: var(--cielo); }
-  .dala__head { display: grid; gap: 16px; max-width: 560px; }
-  .dala__head p { font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); }
 
-  /* Título a la izquierda y los pasos en columna a la derecha */
-  .dala__inner { position: relative; display: grid; gap: 48px; }
-  @media (min-width: 960px) { .dala__inner { grid-template-columns: 0.85fr 1.15fr; gap: 72px; align-items: center; } }
+  .dala__inner { position: relative; display: grid; gap: clamp(28px, 3.6vw, 44px); }
+  /* Título arriba a la izquierda; la frase de apoyo, arriba a la derecha */
+  .dala__top { display: grid; gap: 20px; }
+  .dala__head { display: grid; gap: 14px; }
+  .dala__intro { max-width: 440px; font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); }
+  @media (min-width: 960px) { .dala__top { grid-template-columns: 1fr 0.55fr; align-items: end; gap: 72px; } .dala__intro { justify-self: end; } }
 
-  /* ---- Base (móvil y pantallas táctiles): línea de tiempo vertical, cada paso con su resumen siempre visible ---- */
-  .dala__steps { --fila: 72px; --hueco: 12px; --extra: 84px; position: relative; display: grid; align-content: start; gap: var(--hueco); margin: 0; padding: 0 0 0 38px; list-style: none; }
-  .dala__steps::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(to bottom, var(--cielo), var(--violeta), var(--lavanda)); border-radius: 2px; }
-  .dala__step { position: relative; outline: none; }
-  .dala__step::before { content: ""; position: absolute; left: -35px; top: 34px; width: 14px; height: 14px; border-radius: 50%; background: var(--cielo); box-shadow: 0 0 0 5px rgba(85, 193, 255, 0.25), 0 0 18px var(--cielo); }
-  .dala__card { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 18px; min-height: var(--fila); padding: 16px 22px; border-radius: var(--radio-tarjeta); background: linear-gradient(150deg, rgba(113, 90, 255, 0.32), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.16); transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease; }
-  .dala__num { font-family: var(--font-titulo); font-weight: 800; font-size: 1.875rem; line-height: 1; background: linear-gradient(135deg, var(--cielo), var(--lavanda)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: 1.25rem; }
-  .dala__sum { grid-column: 1 / -1; display: grid; grid-template-rows: 1fr; }
-  .dala__sum p { min-height: 0; overflow: hidden; padding-top: 8px; font-size: 0.9375rem; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
+  /* ---- Filas desplegables anchas ---- */
+  .dala__list { display: grid; gap: 12px; }
+  .dala__row { border-radius: var(--radio-tarjeta); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.14); transition: background 0.3s ease, border-color 0.3s ease; }
+  /* Abierta: mismo azul noche con un poco más de luz y borde celeste (el script marca data-intent; sin JS vale [open]) */
+  .dala__row[data-intent="open"],
+  .dala__row[open]:not([data-intent]) { background: linear-gradient(150deg, rgba(113, 90, 255, 0.38), rgba(255, 255, 255, 0.08)); border-color: rgba(85, 193, 255, 0.55); }
 
-  /* ---- Con mouse: la carta crece hacia abajo y las siguientes bajan (sin superponerse). El resumen aparece al pasar el mouse o enfocar.
-         La lista reserva de antemano el alto máximo para que el resto de la sección no se mueva. ---- */
-  @media (min-width: 720px) and (hover: hover) {
-    .dala__steps { min-height: calc(6 * var(--fila) + 5 * var(--hueco) + var(--extra)); }
-    .dala__step::before { top: calc(var(--fila) / 2 - 7px); }
-    .dala__sum { grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease; }
-    .dala__step:hover .dala__sum, .dala__step:focus-visible .dala__sum { grid-template-rows: 1fr; opacity: 1; }
-    /* Mismo azul noche con acento celeste: apenas más luz y borde celeste, sin cambiar de paleta */
-    .dala__step:hover .dala__card, .dala__step:focus-visible .dala__card {
-      background: linear-gradient(150deg, rgba(113, 90, 255, 0.42), rgba(255, 255, 255, 0.1));
-      border-color: rgba(85, 193, 255, 0.65); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
-    }
+  .dala__sum { display: flex; align-items: center; gap: 18px; min-height: 72px; padding: 12px 22px; cursor: pointer; list-style: none; border-radius: var(--radio-tarjeta); }
+  .dala__sum::-webkit-details-marker { display: none; }
+  .dala__sum:focus-visible { outline: 2px solid var(--cielo); outline-offset: 3px; }
+  .dala__num { font-family: var(--font-titulo); font-weight: 800; font-size: 1.875rem; line-height: 1; min-width: 3.2rem; background: linear-gradient(135deg, var(--cielo), var(--lavanda)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: clamp(1.125rem, 2.2vw, 1.5rem); }
+  .dala__icon { margin-left: auto; flex-shrink: 0; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(85, 193, 255, 0.65); color: var(--cielo); font-family: var(--font-titulo); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+  .dala__icon::before { content: "+"; }
+  .dala__row[data-intent="open"] .dala__icon::before,
+  .dala__row[open]:not([data-intent]) .dala__icon::before { content: "−"; }
+
+  /* La altura y la opacidad de la respuesta las anima el script; el contenido queda recortado */
+  .dala__answer { overflow: hidden; }
+  .dala__answer p { margin: 0; padding: 2px 24px 26px calc(22px + 3.2rem + 18px); font-size: 1.125rem; line-height: 1.55; color: rgba(255, 255, 255, 0.9); max-width: 60rem; }
+
+  @media (max-width: 700px) {
+    .dala__sum { min-height: 64px; padding: 10px 16px; gap: 14px; }
+    .dala__num { font-size: 1.5rem; min-width: 2.6rem; }
+    .dala__answer p { padding: 2px 18px 22px 18px; }
   }
-  .dala__step:focus-visible .dala__card { outline: 2px solid var(--cielo); outline-offset: 4px; }
-  @media (prefers-reduced-motion: reduce) { .dala__card, .dala__sum { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .dala__row { transition: none; } }
 </style>
+<script>
+  import { initDalaRows } from "../scripts/dalaRows";
+  initDalaRows();
+</script>
