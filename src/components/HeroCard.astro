@@ -1,0 +1,225 @@
+---
+// Tarjeta "foil" 2.5D con el logo: inclinación en perspectiva + brillo reflectante que sigue al puntero.
+// Es CSS + variables controladas por pointer events (sin Three.js ni video).
+import { triad } from "../content";
+const chips = [
+  { ...triad[0], clase: "hchip--a", icono: "var(--cielo)" },
+  { ...triad[1], clase: "hchip--b", icono: "var(--lavanda)" },
+  { ...triad[2], clase: "hchip--c", icono: "var(--violeta)" },
+];
+---
+<div class="hstage">
+  <span class="hstage__ring hstage__ring--1" aria-hidden="true"></span>
+  <span class="hstage__ring hstage__ring--2" aria-hidden="true"></span>
+
+  <div class="hcard__persp">
+    <div
+      class="hcard"
+      data-hero-card
+      tabindex="0"
+      role="img"
+      aria-label="Tarjeta con el logo de Synapxix: una estrella sonriente dentro de un triángulo. Se inclina con el mouse, el dedo o las flechas del teclado."
+    >
+      <div class="hcard__face">
+        <span class="hcard__bg"></span>
+        <span class="hcard__circle hcard__circle--1"></span>
+        <span class="hcard__circle hcard__circle--2"></span>
+        <img class="hcard__logo" src="/logo-claro.png" alt="" width="436" height="434" decoding="async" />
+        <span class="hcard__word">Synapxix</span>
+        <span class="hcard__foil"></span>
+        <span class="hcard__sheen"></span>
+        <span class="hcard__rim"></span>
+      </div>
+    </div>
+  </div>
+
+  {chips.map((c) => (
+    <span class={`hchip ${c.clase}`} aria-hidden="true">
+      <i style={`background:${c.icono}`}></i>{c.title}
+    </span>
+  ))}
+</div>
+
+<style>
+  .hstage {
+    --sx: 0; --sy: 0; --mxf: 0.5; --hover: 0;
+    --rx: 0deg; --ry: 0deg; --tz: 0px; --s: 1;
+    position: relative; display: grid; place-items: center; min-height: 340px; padding: 24px 0;
+  }
+
+  /* Anillos de fondo (decorativos, giran despacio) */
+  .hstage__ring { position: absolute; left: 50%; top: 50%; translate: -50% -50%; border-radius: 50%; border: 1.5px dashed rgba(255, 255, 255, 0.22); animation: girar 50s linear infinite; pointer-events: none; }
+  .hstage__ring--1 { width: min(480px, 112%); aspect-ratio: 1; }
+  .hstage__ring--2 { width: min(620px, 140%); aspect-ratio: 1; border-style: solid; border-color: rgba(255, 255, 255, 0.1); animation-direction: reverse; animation-duration: 80s; }
+
+  /* Perspectiva 1500px, una tarjeta 2:3 con cara recortada al 4% */
+  .hcard__persp { position: relative; z-index: 2; perspective: 1500px; width: min(300px, 66vw); }
+  .hcard {
+    position: relative; aspect-ratio: 2 / 3; width: 100%; border-radius: 4%; cursor: grab; touch-action: pan-y;
+    transform: translateZ(var(--tz)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s));
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
+    will-change: transform;
+    filter: drop-shadow(0 calc(8px + 26px * var(--hover)) calc(16px + 34px * var(--hover)) rgba(0, 0, 0, calc(0.28 + 0.32 * var(--hover))));
+  }
+  .hcard:focus-visible { outline: 2px solid var(--cielo); outline-offset: 8px; }
+
+  .hcard__face { position: absolute; inset: 0; overflow: hidden; border-radius: 4%; isolation: isolate; container-type: inline-size; }
+  .hcard__face > * { position: absolute; }
+  .hcard__bg { inset: 0; background: radial-gradient(120% 80% at 50% 28%, #24467a 0%, var(--noche) 48%, #091a2c 100%); }
+  .hcard__circle { left: 50%; top: 41%; translate: -50% -50%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.12); aspect-ratio: 1; }
+  .hcard__circle--1 { width: 84%; }
+  .hcard__circle--2 { width: 58%; border-color: rgba(85, 193, 255, 0.28); }
+  .hcard__logo { left: 50%; top: 41%; translate: -50% -50%; width: 66%; height: auto; filter: drop-shadow(0 0 22px rgba(113, 90, 255, 0.55)); user-select: none; -webkit-user-drag: none; pointer-events: none; }
+  .hcard__word { left: 0; right: 0; bottom: 7%; text-align: center; font-family: var(--font-titulo); font-weight: 700; font-size: 13.5cqw; letter-spacing: -0.02em; color: #fff; }
+
+  /* Capas de brillo independientes de la imagen; la tipografía queda debajo, así el foil la cruza */
+  .hcard__foil {
+    inset: 0; mix-blend-mode: color-dodge; pointer-events: none;
+    background: linear-gradient(115deg, var(--violeta) 0%, transparent 22%, var(--lavanda) 38%, transparent 50%, var(--cielo) 62%, transparent 80%, var(--azul) 100%);
+    opacity: calc(0.7 * var(--hover)); transition: opacity 0.3s ease;
+  }
+  .hcard__sheen {
+    inset: 0; mix-blend-mode: screen; pointer-events: none;
+    background: linear-gradient(102deg, transparent 36%, rgba(255, 255, 255, 0.28) 46%, rgba(255, 255, 255, 0.62) 50%, rgba(255, 255, 255, 0.28) 54%, transparent 64%);
+    background-size: 260% 100%; background-position-x: calc(var(--mxf) * 100%);
+    opacity: calc(0.85 * var(--hover)); transition: opacity 0.25s ease;
+  }
+  .hcard__rim { inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, calc(0.5 * var(--hover))), inset 0 0 calc(18px * var(--hover)) rgba(255, 255, 255, calc(0.18 * var(--hover))); }
+
+  /* Etiquetas flotantes: parallax con el puntero + flotación suave */
+  .hchip { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.28); backdrop-filter: blur(10px); color: #fff; font-family: var(--font-titulo); font-weight: 700; font-size: 0.9375rem; white-space: nowrap; pointer-events: none;
+    transform: translate(calc(var(--sx) * var(--px)), calc(var(--sy) * var(--py))); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); animation: flotar 6s ease-in-out infinite; }
+  .hchip i { width: 10px; height: 10px; border-radius: 50%; }
+  .hchip--a { left: -4%; top: 12%; --px: 36px; --py: 22px; }
+  .hchip--b { right: -6%; top: 44%; --px: -42px; --py: 16px; animation-delay: -2s; }
+  .hchip--c { left: 0%; bottom: 8%; --px: 26px; --py: -26px; animation-delay: -4s; }
+
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @keyframes flotar { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+  @media (max-width: 480px) {
+    .hchip { font-size: 0.8125rem; padding: 8px 13px; }
+    .hchip--a { left: -2%; } .hchip--b { right: -2%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hcard, .hchip { transition: none; animation: none; }
+    .hstage__ring { animation: none; }
+  }
+</style>
+
+<script>
+  const card = document.querySelector<HTMLElement>("[data-hero-card]");
+  const stage = card?.closest<HTMLElement>(".hstage") ?? null;
+  if (card && stage) montar(card, stage);
+
+  function montar(card: HTMLElement, stage: HTMLElement) {
+    // Con "reducir movimiento": tarjeta en reposo, sin inclinación ni brillos, y sin foco de teclado.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      card.removeAttribute("tabindex");
+      return;
+    }
+
+    const raiz = card.closest<HTMLElement>(".hero") ?? document.body;
+    const ac = new AbortController();
+    const opt = { signal: ac.signal };
+    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+
+    let sx = 0, sy = 0, demoRaf = 0, interactuo = false, visible = false, introHecha = false;
+
+    // Un único punto escribe las variables CSS; la transición del transform interpola (sin colas de animación).
+    const aplicar = (x: number, y: number, mxf: number, hover: number) => {
+      sx = x; sy = y;
+      const s = stage.style;
+      s.setProperty("--sx", x.toFixed(3));
+      s.setProperty("--sy", y.toFixed(3));
+      s.setProperty("--ry", `${(13 * x).toFixed(2)}deg`);
+      s.setProperty("--rx", `${(-9 * y).toFixed(2)}deg`);
+      s.setProperty("--tz", `${(46 * hover).toFixed(1)}px`);
+      s.setProperty("--s", (1 + 0.05 * hover).toFixed(3));
+      s.setProperty("--mxf", mxf.toFixed(3));
+      s.setProperty("--hover", hover.toFixed(3));
+    };
+    const reposo = () => aplicar(0, 0, 0.5, 0);
+    const detenerDemo = () => { cancelAnimationFrame(demoRaf); demoRaf = 0; };
+
+    // Demostración finita de 5.2 s: se interrumpe al instante con cualquier interacción.
+    const correrDemo = () => {
+      detenerDemo();
+      const inicio = performance.now();
+      const frame = (ahora: number) => {
+        const t = (ahora - inicio) / 5200;
+        if (t >= 1) { demoRaf = 0; reposo(); return; }
+        const f = Math.sin(Math.PI * t);
+        const a = Math.sin(t * Math.PI * 3);
+        aplicar(a * 0.85 * f, Math.cos(t * Math.PI * 2.2) * 0.55 * f, clamp(0.5 + 0.45 * a, 0, 1), f);
+        demoRaf = requestAnimationFrame(frame);
+      };
+      demoRaf = requestAnimationFrame(frame);
+    };
+
+    // Mouse: el tilt se normaliza por el tamaño del viewport; el brillo, por el de la tarjeta.
+    raiz.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      interactuo = true; detenerDemo();
+      const r = card.getBoundingClientRect();
+      const x = clamp((e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2), -1, 1);
+      const y = clamp((e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2), -1, 1);
+      aplicar(x, y, clamp((e.clientX - r.left) / r.width, 0, 1), 1);
+    }, opt);
+    raiz.addEventListener("pointerleave", () => { if (tid === null) reposo(); }, opt);
+    window.addEventListener("blur", reposo, opt);
+
+    // Táctil/lápiz: arrastre horizontal con pointer capture; el vertical queda para el scroll (touch-action: pan-y).
+    let tid: number | null = null, ox = 0, oy = 0;
+    card.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse") return;
+      tid = e.pointerId; ox = e.clientX; oy = e.clientY; interactuo = true; detenerDemo();
+      try { card.setPointerCapture(e.pointerId); } catch { /* puntero ya liberado */ }
+      const r = card.getBoundingClientRect();
+      aplicar(0, 0, clamp((e.clientX - r.left) / r.width, 0, 1), 1);
+    }, opt);
+    card.addEventListener("pointermove", (e) => {
+      if (e.pointerId !== tid) return;
+      const r = card.getBoundingClientRect();
+      aplicar(
+        clamp((e.clientX - ox) / (r.width * 0.55), -1, 1),
+        clamp((e.clientY - oy) / (r.height * 0.55), -1, 1),
+        clamp((e.clientX - r.left) / r.width, 0, 1),
+        1
+      );
+    }, opt);
+    const soltar = (e: PointerEvent) => { if (e.pointerId !== tid) return; tid = null; reposo(); };
+    card.addEventListener("pointerup", soltar, opt);
+    card.addEventListener("pointercancel", soltar, opt);
+    card.addEventListener("lostpointercapture", soltar, opt);
+
+    // Teclado: flechas en pasos de .25, Inicio/Escape reposo, Enter/Espacio demostración.
+    card.addEventListener("keydown", (e) => {
+      const paso = 0.25;
+      let x = sx, y = sy;
+      switch (e.key) {
+        case "ArrowLeft": x -= paso; break;
+        case "ArrowRight": x += paso; break;
+        case "ArrowUp": y -= paso; break;
+        case "ArrowDown": y += paso; break;
+        case "Home": case "Escape": e.preventDefault(); detenerDemo(); reposo(); return;
+        case "Enter": case " ": e.preventDefault(); interactuo = true; correrDemo(); return;
+        default: return;
+      }
+      e.preventDefault(); interactuo = true; detenerDemo();
+      x = clamp(x, -1, 1); y = clamp(y, -1, 1);
+      aplicar(x, y, clamp(0.5 + x * 0.5, 0, 1), 1);
+    }, opt);
+    card.addEventListener("blur", () => { detenerDemo(); reposo(); }, opt);
+
+    // Pausa al ocultar la pestaña o salir de pantalla; una demostración inicial al verla por primera vez.
+    document.addEventListener("visibilitychange", () => { if (document.hidden) { detenerDemo(); reposo(); } }, opt);
+    const io = new IntersectionObserver((entradas) => {
+      visible = entradas[0]?.isIntersecting ?? false;
+      if (!visible) { detenerDemo(); reposo(); return; }
+      if (!introHecha && !interactuo) { introHecha = true; setTimeout(() => { if (visible && !interactuo && !document.hidden) correrDemo(); }, 700); }
+    }, { threshold: 0.6 });
+    io.observe(card);
+
+    window.addEventListener("pagehide", () => { ac.abort(); io.disconnect(); detenerDemo(); }, { once: true });
+  }
+</script>

@@ -38,6 +38,11 @@ check((html.match(/class="split"/g) ?? []).length === 7, 'deben animarse exactam
   const texto = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   check(h2s.some((s) => texto(s) === 'El momento de sumar la IA a la educación'), 'el título dividido debe conservar el texto completo y legible');
 }
+// Hero: tarjeta foil 2.5D con el logo
+check(has('data-hero-card'), 'el hero debe tener la tarjeta interactiva (data-hero-card)');
+check(has('role="img"') && /aria-label="Tarjeta[^"]+"/.test(html), 'la tarjeta debe exponer una descripción accesible');
+check((html.match(/class="hchip/g) ?? []).length === 3, 'el hero debe tener las 3 etiquetas flotantes (Gusto, Interés, Nivel)');
+check(!has('hero__card'), 'la tarjeta estática anterior del hero debe haberse reemplazado');
 // T5: docentes, respaldo, contacto
 for (const a of ['respaldo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);
 for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'UADER', 'UTN', 'Polo Tecnológico La Nube'])
