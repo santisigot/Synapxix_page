@@ -78,3 +78,10 @@ p { margin: 0; }
   box-shadow: 0 calc(4px + 18px * var(--hover)) calc(10px + 24px * var(--hover)) rgba(16, 46, 74, calc(0.05 + 0.17 * var(--hover)));
 }
 @media (prefers-reduced-motion: reduce) { .tilt__card { transition: none; } }
+
+/* Las secciones a pantalla completa se "imantan" al borde al llegar cerca (suave, solo con mouse y pantalla ancha):
+   así no asoma la sección siguiente (clara) por abajo. */
+@media (min-width: 960px) and (hover: hover) {
+  html { scroll-snap-type: y proximity; }
+  .hero, .dala, .contact { scroll-snap-align: start; }
+}

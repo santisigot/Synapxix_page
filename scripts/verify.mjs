@@ -69,6 +69,15 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
   check(!/clamp\(0px,\s*1\.5vw,\s*20px\)/.test(html + css), 'D.A.L.A. y contacto deben llegar hasta los bordes (sin margen lateral)');
   check(!/\.contact\{[^}]*border-radius/.test(html + css), 'el contacto no debe tener esquinas redondeadas');
   check(has('contact__chip'), 'el contacto debe incluir los distintivos (chips)');
+  // D.A.L.A.: los pasos no se solapan, el hover conserva la paleta y las secciones a pantalla completa se imantan
+  check(!/dala__step[^{]*:hover[^{]*\{[^}]*(#6a53f2|#34269f)/.test(html + css), 'el hover de los pasos no debe cambiar a un violeta fuerte (rompe la paleta azul noche)');
+  // Sin overflow:hidden "a secas" en las secciones a pantalla completa: se pueden desplazar por dentro al enfocar y dejan un hueco abajo.
+  for (const sec of ['hero', 'dala', 'contact']) {
+    const reglas = [...(html + css).matchAll(new RegExp(`\\.${sec}(?:\\[[^\\]]*\\])?\\{[^}]*\\}`, 'g'))].map((m) => m[0]);
+    check(reglas.some((r) => /overflow:\s*clip/.test(r)), `.${sec} debe usar overflow: clip (con hidden la sección se desplaza por dentro)`);
+  }
+  check(!/left:\s*-22px/.test(html + css), 'la carta ampliada no debe desbordarse sobre la vecina (nada de left:-22px)');
+  check(/scroll-snap-type:\s*y\s+proximity/.test(html + css) && /scroll-snap-align:\s*start/.test(html + css), 'el hero, D.A.L.A. y el contacto deben imantarse a la pantalla (scroll-snap)');
   // Texto nítido: la tarjeta inclinable no puede usar will-change, filter ni scale() (ablandan el texto al animarse).
   const tilt = (html + css).match(/\.tilt__card[^{]*\{[^}]*\}/g) ?? [];
   check(tilt.length > 0, 'debe existir el estilo compartido .tilt__card');
