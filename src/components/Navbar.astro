@@ -38,7 +38,7 @@ import { nav, ctaLabel } from "../content";
   .nav__mobile a:not(.btn) { padding: 12px 0; font-weight: 600; border-bottom: 1px solid var(--linea); }
   .nav__mobile :global(.btn) { margin-top: 16px; justify-self: start; }
 
-  :global(.js) .nav:not(.is-solid) { background: transparent; backdrop-filter: none; color: #fff; }
+  :global(.js) .nav:not(.is-solid) { --btn-text: #fff; --btn-line: #fff; background: transparent; backdrop-filter: none; color: #fff; }
   :global(.js) .nav:not(.is-solid) .nav__logo--dark { display: none; }
   :global(.js) .nav:not(.is-solid) .nav__logo--light { display: block; }
   :global(.js) .nav:not(.is-solid) .nav__links a:hover { color: var(--cielo); }

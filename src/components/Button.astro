@@ -1,63 +1,41 @@
 ---
-interface Props { href: string; variant?: "primary" | "secondary"; }
-const { href, variant = "primary" } = Astro.props;
+interface Props { href: string; }
+const { href } = Astro.props;
 ---
-<a class={`btn btn--${variant}`} href={href}>
+<a class="btn" href={href}>
   <span class="btn__label"><slot /></span>
   <span class="btn__icon" aria-hidden="true">
     <span class="btn__arrow btn__arrow--out">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
     <span class="btn__arrow btn__arrow--in">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
-  </span>
-  <span class="btn__star" aria-hidden="true">
-    <svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 9.3l-4.9 4.3L17.6 21 12 17.6 6.4 21l1.5-7.4L3 9.3l6.4-.9z" fill="currentColor"/></svg>
   </span>
 </a>
 <style>
+  /* Sin relleno: el color lo define el fondo donde se use (--btn-text / --btn-line). */
   .btn {
-    --estrella: var(--cielo);
-    position: relative;
-    display: inline-flex; align-items: center; gap: 16px;
-    padding: 10px 12px 10px 26px;
-    border-radius: var(--radio-pildora);
-    font-family: var(--font-titulo); font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em;
-    transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1), box-shadow 0.18s ease;
+    display: inline-flex; align-items: center; gap: 12px;
+    color: var(--btn-text, var(--noche));
+    font-family: var(--font-titulo); font-weight: 700; font-size: 1rem; letter-spacing: -0.01em;
+    transition: background 0.25s ease, transform 0.2s ease;
   }
-  /* Brillo que cruza el botón al pasar el mouse */
-  .btn::before {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.5) 50%, transparent 65%);
-    background-size: 250% 100%; background-position: 160% 0;
-    transition: background-position 0.7s ease;
-  }
-  .btn:hover::before { background-position: -60% 0; }
-
-  .btn__icon { position: relative; overflow: hidden; display: block; width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+  .btn__icon { position: relative; overflow: hidden; display: block; width: 18px; height: 18px; flex-shrink: 0; color: var(--btn-line, var(--violeta)); }
   .btn__arrow { position: absolute; inset: 0; display: grid; place-items: center; transition: transform 0.35s cubic-bezier(0.5, 0, 0.2, 1); }
-  .btn__arrow--in { transform: translateX(-100%); }
-  .btn:hover .btn__arrow--out { transform: translateX(100%); }
+  .btn__arrow--in { transform: translateX(-120%); }
+  .btn:hover .btn__arrow--out { transform: translateX(120%); }
   .btn:hover .btn__arrow--in { transform: translateX(0); }
+  .btn:active { transform: scale(0.98); }
 
-  /* Estrella del logo que "salta" en la esquina */
-  .btn__star { position: absolute; top: -12px; right: -6px; width: 24px; height: 24px; color: var(--estrella); transform: scale(0) rotate(-40deg); transition: transform 0.35s cubic-bezier(0.3, 1.8, 0.5, 1); pointer-events: none; }
-  .btn:hover .btn__star { transform: scale(1) rotate(14deg); }
+  /* Todos los botones: solo texto con flecha, subrayado al pasar el mouse */
+  .btn { padding: 13px 4px; }
+  .btn__label { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size 0.3s ease; padding-bottom: 2px; }
+  .btn:hover .btn__label { background-size: 100% 1.5px; }
 
-  /* Sin sombra: el botón se levanta e inclina al pasar el mouse y se achica al hacer clic. */
-  .btn:hover { transform: translateY(-3px) rotate(-1.5deg); }
-  .btn:active { transform: scale(0.96); }
-
-  .btn--primary { background: var(--violeta); color: #fff; }
-  .btn--primary .btn__icon { background: #fff; color: var(--violeta); }
-
-  .btn--secondary { --estrella: var(--lavanda); background: #fff; color: var(--noche); }
-  .btn--secondary .btn__icon { background: var(--violeta); color: #fff; }
-
-  .btn:focus-visible { outline: 3px solid var(--cielo); outline-offset: 4px; }
+  .btn:focus-visible { outline: 2px solid var(--cielo); outline-offset: 4px; border-radius: var(--radio-pildora); }
   @media (prefers-reduced-motion: reduce) {
-    .btn, .btn::before, .btn__arrow, .btn__star { transition: none; }
-    .btn:hover, .btn:active { transform: none; }
+    .btn, .btn__arrow, .btn__label { transition: none; }
+    .btn:active { transform: none; }
   }
 </style>
