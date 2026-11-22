@@ -11,9 +11,11 @@ const tonos = ["cielo", "lavanda", "violeta"];
     </div>
     <ul class="backers__grid">
       {backers.map((b, i) => (
-        <li class={`backer backer--${tonos[i % tonos.length]} reveal`}>
-          <h3>{b.name}</h3>
-          <p>{b.role}</p>
+        <li class="tilt settle" data-tilt style={`--k:${i % 4}`}>
+          <div class={`backer tilt__card backer--${tonos[i % tonos.length]}`}>
+            <h3><SplitText text={b.name} delay={320 + (i % 4) * 150} /></h3>
+            <p><SplitText text={b.role} delay={420 + (i % 4) * 150} /></p>
+          </div>
         </li>
       ))}
     </ul>

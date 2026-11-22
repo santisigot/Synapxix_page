@@ -22,14 +22,16 @@ const icons = {
       </div>
     </div>
     <div class="teachers__grid">
-      {teacherBenefits.map((b) => (
-        <article class="benefit reveal">
+      {teacherBenefits.map((b, i) => (
+        <div class="tilt settle" data-tilt style={`--k:${i}`}>
+        <article class="benefit tilt__card">
           <span class="benefit__icon" aria-hidden="true">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icons[b.icon]} /></svg>
           </span>
-          <h3>{b.title}</h3>
-          <p>{b.text}</p>
+          <h3><SplitText text={b.title} delay={320 + i * 150} /></h3>
+          <p><SplitText text={b.text} delay={420 + i * 150} /></p>
         </article>
+        </div>
       ))}
     </div>
   </div>

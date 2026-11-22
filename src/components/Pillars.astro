@@ -11,14 +11,16 @@ const tonos = ["cielo", "lavanda", "violeta", "cielo"];
     </div>
     <div class="pillars__list">
       {pillars.map((p, i) => (
-        <article class={`pillar pillar--${tonos[i]} reveal`}>
-          <span class="pillar__n">{p.n}</span>
-          <div class="pillar__body">
-            <h3>{p.title}</h3>
-            <p>{p.text}</p>
-          </div>
-          <span class="pillar__tag">{p.tag}</span>
-        </article>
+        <div class="tilt settle" data-tilt style="--k:0">
+          <article class={`pillar tilt__card pillar--${tonos[i]}`}>
+            <span class="pillar__n">{p.n}</span>
+            <div class="pillar__body">
+              <h3><SplitText text={p.title} delay={320} /></h3>
+              <p><SplitText text={p.text} delay={420} /></p>
+            </div>
+            <span class="pillar__tag">{p.tag}</span>
+          </article>
+        </div>
       ))}
     </div>
   </div>

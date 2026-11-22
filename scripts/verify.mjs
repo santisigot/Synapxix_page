@@ -30,10 +30,12 @@ check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul romp
 check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
 if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
 // Efecto de palabras que se asientan en los títulos de sección
-check((html.match(/class="split"/g) ?? []).length === 19, 'deben animarse 19 textos con SplitText: 7 títulos de sección + título y texto de las 6 tarjetas');
-check((html.match(/<div[^>]*\sdata-tilt[\s>]/g) ?? []).length === 6, 'las 6 tarjetas (Gusto/Interés/Nivel y Todo es trazable/Privacidad/Un docente decide) deben ser inclinables (data-tilt)');
-check((html.match(/<div[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 6, 'las 6 tarjetas deben entrar con el efecto "settle" (como el texto)');
-check(!/(triad__card|why__card)[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
+// 22 tarjetas con efecto: 3 Gusto/Interés/Nivel + 3 Por qué + 4 Pilares + 4 Docentes + 8 Respaldo
+check((html.match(/class="split"/g) ?? []).length === 51, 'deben animarse 51 textos con SplitText: 7 títulos de sección + título y texto de las 22 tarjetas');
+check((html.match(/<(?:div|li)[^>]*\sdata-tilt[\s>]/g) ?? []).length === 22, 'las 22 tarjetas deben ser inclinables (data-tilt)');
+check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 22, 'las 22 tarjetas deben entrar con el efecto "settle" (como el texto)');
+check(!/(triad__card|why__card|pillar |benefit |backer )[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
+check(!/why__card--violeta[^{]*\{[^}]*background:\s*var\(--violeta\)\s*[;}]/.test(html + (existsSync('dist/_astro') ? readdirSync('dist/_astro').filter((f) => f.endsWith('.css')).map((f) => readFileSync(`dist/_astro/${f}`, 'utf8')).join('') : '')), 'la tarjeta "Un docente decide" no debe ser violeta sólido (desentona con las otras, que son tonos suaves)');
 {
   const h1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? [])[1] ?? '';
   check(h1.length > 0 && !h1.includes('split'), 'el título del hero no debe usar SplitText');
@@ -53,8 +55,12 @@ check((html.match(/class="hspark/g) ?? []).length >= 3, 'debe haber destellos su
 check(!has('hero__card') && !has('contact__art'), 'las ilustraciones estáticas anteriores deben haberse reemplazado');
 // T5: docentes, respaldo, contacto
 for (const a of ['respaldo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);
-for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'UADER', 'UTN', 'Polo Tecnológico La Nube'])
-  check(has(w), `falta "${w}"`);
+{
+  // El texto de las tarjetas va dividido en palabras (SplitText): se compara el texto sin etiquetas.
+  const plano = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'UADER', 'UTN', 'Polo Tecnológico La Nube', 'Universidad de Concepción del Uruguay', 'Universidad Militar Nueva Granada', 'Politécnico Grancolombiano'])
+    check(plano.includes(w), `falta "${w}"`);
+}
 // Secciones y marcas quitadas a pedido
 check(!has('id="equipo"') && !has('Hacia la demo') && !has('Fernando Hirschfeld'), 'no deben aparecer las secciones "Qué sigue" ni "El equipo"');
 check(!has('Confirmada'), 'ninguna institución debe llevar el sello "Confirmada"');
