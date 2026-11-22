@@ -1,6 +1,7 @@
 ---
 import Button from "./Button.astro";
 import SplitText from "./SplitText.astro";
+import FoilCard from "./FoilCard.astro";
 import { contact } from "../content";
 import { CONTACT_EMAIL } from "../config";
 const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
@@ -26,17 +27,7 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
       </ul>
     </div>
 
-    <div class="contact__art reveal" aria-hidden="true">
-      <span class="ring ring--1"></span>
-      <span class="ring ring--2"></span>
-      <span class="ring ring--3"></span>
-      <div class="contact__card">
-        <img src="/logo-azul.png" alt="" width="220" height="220" />
-      </div>
-      <span class="orb orb--1"></span>
-      <span class="orb orb--2"></span>
-      <span class="orb orb--3"></span>
-    </div>
+    <FoilCard />
   </div>
 
   <p class="container contact__closing">{contact.closing}</p>
@@ -61,23 +52,7 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
   .contact__chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 0; padding: 0; list-style: none; }
   .contact__chip { padding: 9px 16px; border-radius: var(--radio-pildora); background: rgba(255, 255, 255, 0.16); font-weight: 600; font-size: 0.9375rem; }
 
-  .contact__art { position: relative; display: grid; place-items: center; min-height: 320px; }
-  .ring { position: absolute; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.35); animation: girar 40s linear infinite; }
-  .ring--1 { width: 240px; height: 240px; }
-  .ring--2 { width: 340px; height: 340px; animation-direction: reverse; animation-duration: 60s; border-style: solid; border-color: rgba(255, 255, 255, 0.18); }
-  .ring--3 { width: 440px; height: 440px; }
-  .contact__card { position: relative; display: grid; place-items: center; width: 190px; height: 190px; border-radius: 40px; background: #fff; box-shadow: 0 24px 60px rgba(16, 46, 74, 0.35); transform: rotate(-6deg); animation: flotar 6s ease-in-out infinite; }
-  .contact__card img { width: 78%; height: auto; }
-  .orb { position: absolute; border-radius: 50%; }
-  .orb--1 { width: 26px; height: 26px; background: var(--cielo); top: 14%; left: 22%; }
-  .orb--2 { width: 16px; height: 16px; background: #fff; bottom: 18%; right: 20%; }
-  .orb--3 { width: 38px; height: 38px; border: 3px solid var(--lavanda); bottom: 10%; left: 26%; }
-
   .contact__closing { position: relative; margin-top: clamp(48px, 7vw, 88px); padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.25); font-family: var(--font-titulo); font-weight: 700; font-size: 1.125rem; }
 
-  @keyframes girar { to { transform: rotate(360deg); } }
-  @keyframes flotar { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
   @media (min-width: 960px) { .contact__grid { grid-template-columns: 1.1fr 0.9fr; gap: 72px; } }
-  @media (max-width: 480px) { .ring--3 { width: 320px; height: 320px; } .ring--2 { width: 270px; height: 270px; } }
-  @media (prefers-reduced-motion: reduce) { .ring, .contact__card { animation: none; } }
 </style>

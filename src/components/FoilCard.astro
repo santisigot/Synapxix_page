@@ -1,21 +1,23 @@
 ---
 // Tarjeta "foil" 2.5D con el logo: inclinación en perspectiva + brillo reflectante que sigue al puntero.
-// Es CSS + variables controladas por pointer events (sin Three.js ni video).
-import { triad } from "../content";
-const chips = [
-  { ...triad[0], clase: "hchip--a", icono: "var(--cielo)" },
-  { ...triad[1], clase: "hchip--b", icono: "var(--lavanda)" },
-  { ...triad[2], clase: "hchip--c", icono: "var(--violeta)" },
-];
+// Es CSS + variables controladas por pointer events (sin Three.js ni video). Se usa en el hero y en el contacto.
+const destellos = ["hspark--1", "hspark--2", "hspark--3", "hspark--4", "hspark--5"];
 ---
 <div class="hstage">
   <span class="hstage__ring hstage__ring--1" aria-hidden="true"></span>
   <span class="hstage__ring hstage__ring--2" aria-hidden="true"></span>
+  <span class="hstage__orbit" aria-hidden="true"></span>
+
+  {destellos.map((d) => (
+    <span class={`hspark ${d}`} aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 9.3l-4.9 4.3L17.6 21 12 17.6 6.4 21l1.5-7.4L3 9.3l6.4-.9z" fill="currentColor"/></svg>
+    </span>
+  ))}
 
   <div class="hcard__persp">
     <div
       class="hcard"
-      data-hero-card
+      data-foil-card
       tabindex="0"
       role="img"
       aria-label="Tarjeta con el logo de Synapxix: una estrella sonriente dentro de un triángulo. Se inclina con el mouse, el dedo o las flechas del teclado."
@@ -32,12 +34,6 @@ const chips = [
       </div>
     </div>
   </div>
-
-  {chips.map((c) => (
-    <span class={`hchip ${c.clase}`} aria-hidden="true">
-      <i style={`background:${c.icono}`}></i>{c.title}
-    </span>
-  ))}
 </div>
 
 <style>
@@ -47,10 +43,23 @@ const chips = [
     position: relative; display: grid; place-items: center; min-height: 340px; padding: 24px 0;
   }
 
-  /* Anillos de fondo (decorativos, giran despacio) */
+  /* Anillos y órbita de fondo (decorativos, giran despacio) */
   .hstage__ring { position: absolute; left: 50%; top: 50%; translate: -50% -50%; border-radius: 50%; border: 1.5px dashed rgba(255, 255, 255, 0.22); animation: girar 50s linear infinite; pointer-events: none; }
   .hstage__ring--1 { width: min(480px, 112%); aspect-ratio: 1; }
   .hstage__ring--2 { width: min(620px, 140%); aspect-ratio: 1; border-style: solid; border-color: rgba(255, 255, 255, 0.1); animation-direction: reverse; animation-duration: 80s; }
+  .hstage__orbit { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: min(480px, 112%); aspect-ratio: 1; animation: girar 24s linear infinite; pointer-events: none; }
+  .hstage__orbit::before { content: ""; position: absolute; left: 50%; top: -5px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--cielo); box-shadow: 0 0 14px 3px rgba(85, 193, 255, 0.7); }
+
+  /* Destellos: pequeñas estrellas que titilan y se desplazan apenas con el puntero */
+  .hspark { position: absolute; z-index: 1; width: var(--z); height: var(--z); color: var(--c); pointer-events: none; opacity: 0.2;
+    transform: translate(calc(var(--sx) * var(--px)), calc(var(--sy) * var(--py))); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: titilar 4.8s ease-in-out infinite; }
+  .hspark svg { display: block; width: 100%; height: 100%; }
+  .hspark--1 { --z: 16px; --c: var(--cielo); --px: 22px; --py: 14px; left: 8%; top: 12%; }
+  .hspark--2 { --z: 11px; --c: #fff; --px: -26px; --py: 10px; right: 6%; top: 20%; animation-delay: -1.4s; }
+  .hspark--3 { --z: 18px; --c: var(--lavanda); --px: -18px; --py: -16px; right: 12%; bottom: 12%; animation-delay: -2.6s; }
+  .hspark--4 { --z: 10px; --c: #fff; --px: 24px; --py: -12px; left: 4%; bottom: 28%; animation-delay: -3.5s; }
+  .hspark--5 { --z: 9px; --c: var(--cielo); --px: -10px; --py: 20px; left: 46%; top: 0%; animation-delay: -0.7s; }
 
   /* Perspectiva 1500px, una tarjeta 2:3 con cara recortada al 4% */
   .hcard__persp { position: relative; z-index: 2; perspective: 1500px; width: min(300px, 66vw); }
@@ -66,11 +75,11 @@ const chips = [
   .hcard__face { position: absolute; inset: 0; overflow: hidden; border-radius: 4%; isolation: isolate; container-type: inline-size; }
   .hcard__face > * { position: absolute; }
   .hcard__bg { inset: 0; background: radial-gradient(120% 80% at 50% 28%, #24467a 0%, var(--noche) 48%, #091a2c 100%); }
-  .hcard__circle { left: 50%; top: 41%; translate: -50% -50%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.12); aspect-ratio: 1; }
-  .hcard__circle--1 { width: 84%; }
-  .hcard__circle--2 { width: 58%; border-color: rgba(85, 193, 255, 0.28); }
-  .hcard__logo { left: 50%; top: 41%; translate: -50% -50%; width: 66%; height: auto; filter: drop-shadow(0 0 22px rgba(113, 90, 255, 0.55)); user-select: none; -webkit-user-drag: none; pointer-events: none; }
-  .hcard__word { left: 0; right: 0; bottom: 7%; text-align: center; font-family: var(--font-titulo); font-weight: 700; font-size: 13.5cqw; letter-spacing: -0.02em; color: #fff; }
+  .hcard__circle { left: 50%; top: 40%; translate: -50% -50%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.12); aspect-ratio: 1; }
+  .hcard__circle--1 { width: 98%; }
+  .hcard__circle--2 { width: 74%; border-color: rgba(85, 193, 255, 0.28); }
+  .hcard__logo { left: 50%; top: 40%; translate: -50% -50%; width: 80%; height: auto; filter: drop-shadow(0 0 26px rgba(113, 90, 255, 0.6)); user-select: none; -webkit-user-drag: none; pointer-events: none; }
+  .hcard__word { left: 0; right: 0; bottom: 6%; text-align: center; font-family: var(--font-titulo); font-weight: 700; font-size: 13.5cqw; letter-spacing: -0.02em; color: #fff; }
 
   /* Capas de brillo independientes de la imagen; la tipografía queda debajo, así el foil la cruza */
   .hcard__foil {
@@ -86,30 +95,23 @@ const chips = [
   }
   .hcard__rim { inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, calc(0.5 * var(--hover))), inset 0 0 calc(18px * var(--hover)) rgba(255, 255, 255, calc(0.18 * var(--hover))); }
 
-  /* Etiquetas flotantes: parallax con el puntero + flotación suave */
-  .hchip { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.28); backdrop-filter: blur(10px); color: #fff; font-family: var(--font-titulo); font-weight: 700; font-size: 0.9375rem; white-space: nowrap; pointer-events: none;
-    transform: translate(calc(var(--sx) * var(--px)), calc(var(--sy) * var(--py))); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); animation: flotar 6s ease-in-out infinite; }
-  .hchip i { width: 10px; height: 10px; border-radius: 50%; }
-  .hchip--a { left: -4%; top: 12%; --px: 36px; --py: 22px; }
-  .hchip--b { right: -6%; top: 44%; --px: -42px; --py: 16px; animation-delay: -2s; }
-  .hchip--c { left: 0%; bottom: 8%; --px: 26px; --py: -26px; animation-delay: -4s; }
-
   @keyframes girar { to { transform: rotate(360deg); } }
-  @keyframes flotar { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
-  @media (max-width: 480px) {
-    .hchip { font-size: 0.8125rem; padding: 8px 13px; }
-    .hchip--a { left: -2%; } .hchip--b { right: -2%; }
+  @keyframes titilar {
+    0%, 100% { opacity: 0.15; scale: 0.6; rotate: 0deg; }
+    50% { opacity: 0.85; scale: 1; rotate: 25deg; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hcard, .hchip { transition: none; animation: none; }
-    .hstage__ring { animation: none; }
+    .hcard, .hspark { transition: none; animation: none; }
+    .hspark { opacity: 0.45; }
+    .hstage__ring, .hstage__orbit { animation: none; }
   }
 </style>
 
 <script>
-  const card = document.querySelector<HTMLElement>("[data-hero-card]");
-  const stage = card?.closest<HTMLElement>(".hstage") ?? null;
-  if (card && stage) montar(card, stage);
+  document.querySelectorAll<HTMLElement>("[data-foil-card]").forEach((card) => {
+    const stage = card.closest<HTMLElement>(".hstage");
+    if (stage) montar(card, stage);
+  });
 
   function montar(card: HTMLElement, stage: HTMLElement) {
     // Con "reducir movimiento": tarjeta en reposo, sin inclinación ni brillos, y sin foco de teclado.
@@ -118,7 +120,8 @@ const chips = [
       return;
     }
 
-    const raiz = card.closest<HTMLElement>(".hero") ?? document.body;
+    // Zona donde el mouse inclina la tarjeta: la sección que la contiene (hero o contacto).
+    const raiz = card.closest<HTMLElement>("section") ?? document.body;
     const ac = new AbortController();
     const opt = { signal: ac.signal };
     const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
