@@ -5,18 +5,76 @@ import { CONTACT_EMAIL } from "../config";
 const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
 ---
 <section class="contact" id="contacto">
-  <div class="container contact__inner reveal">
-    <h2>{contact.title}</h2>
-    <p>{contact.text}</p>
-    <Button href={`mailto:${CONTACT_EMAIL}?subject=${asunto}`} variant="secondary">{contact.button}</Button>
-    <a class="contact__mail" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-    <p class="contact__closing">{contact.closing}</p>
+  <div class="contact__bg" aria-hidden="true">
+    <span class="contact__glow contact__glow--a"></span>
+    <span class="contact__glow contact__glow--b"></span>
+    <span class="contact__dots"></span>
   </div>
+
+  <div class="container contact__grid">
+    <div class="contact__copy reveal">
+      <span class="contact__eyebrow">{contact.eyebrow}</span>
+      <h2>{contact.title}</h2>
+      <p>{contact.text}</p>
+      <div class="contact__actions">
+        <Button href={`mailto:${CONTACT_EMAIL}?subject=${asunto}`} variant="secondary">{contact.button}</Button>
+        <a class="contact__mail" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+      </div>
+      <ul class="contact__chips">
+        {contact.chips.map((c) => <li class="contact__chip">{c}</li>)}
+      </ul>
+    </div>
+
+    <div class="contact__art reveal" aria-hidden="true">
+      <span class="ring ring--1"></span>
+      <span class="ring ring--2"></span>
+      <span class="ring ring--3"></span>
+      <div class="contact__card">
+        <img src="/logo-azul.png" alt="" width="220" height="220" />
+      </div>
+      <span class="orb orb--1"></span>
+      <span class="orb orb--2"></span>
+      <span class="orb orb--3"></span>
+    </div>
+  </div>
+
+  <p class="container contact__closing">{contact.closing}</p>
 </section>
 <style>
-  .contact { background: var(--violeta); color: #fff; border-radius: 36px; margin: 0 clamp(0px, 1.5vw, 20px) clamp(48px, 7vw, 96px); padding: clamp(64px, 9vw, 112px) 0; text-align: center; }
-  .contact__inner { display: grid; gap: 24px; justify-items: center; }
-  .contact__inner > p:not(.contact__closing) { max-width: 560px; font-size: 1.125rem; }
-  .contact__mail { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
-  .contact__closing { font-family: var(--font-titulo); font-weight: 700; margin-top: 8px; opacity: 0.9; }
+  .contact { position: relative; overflow: hidden; color: #fff; padding: clamp(72px, 10vw, 140px) 0 clamp(48px, 6vw, 72px); background: var(--violeta); }
+  .contact__bg { position: absolute; inset: 0; pointer-events: none; }
+  .contact__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
+  .contact__glow--a { width: 480px; height: 480px; background: var(--lavanda); opacity: 0.4; top: -200px; right: -100px; }
+  .contact__glow--b { width: 420px; height: 420px; background: var(--cielo); opacity: 0.35; bottom: -220px; right: 18%; }
+  .contact__dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1.5px, transparent 1.5px); background-size: 30px 30px; mask-image: linear-gradient(100deg, transparent 30%, #000 100%); }
+
+  .contact__grid { position: relative; display: grid; gap: 56px; align-items: center; }
+  .contact__copy { display: grid; gap: 22px; justify-items: start; }
+  .contact__eyebrow { padding: 8px 16px; border-radius: var(--radio-pildora); background: rgba(255, 255, 255, 0.18); font-family: var(--font-titulo); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .contact h2 { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.08; }
+  .contact__copy > p { max-width: 520px; font-size: 1.1875rem; color: rgba(255, 255, 255, 0.92); }
+  .contact__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 6px; }
+  .contact__mail { font-weight: 700; text-decoration: underline; text-underline-offset: 5px; overflow-wrap: anywhere; }
+  .contact__chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .contact__chip { padding: 9px 16px; border-radius: var(--radio-pildora); border: 1.5px solid rgba(255, 255, 255, 0.5); font-weight: 700; font-size: 0.9375rem; }
+
+  .contact__art { position: relative; display: grid; place-items: center; min-height: 320px; }
+  .ring { position: absolute; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.35); animation: girar 40s linear infinite; }
+  .ring--1 { width: 240px; height: 240px; }
+  .ring--2 { width: 340px; height: 340px; animation-direction: reverse; animation-duration: 60s; border-style: solid; border-color: rgba(255, 255, 255, 0.18); }
+  .ring--3 { width: 440px; height: 440px; }
+  .contact__card { position: relative; display: grid; place-items: center; width: 190px; height: 190px; border-radius: 40px; background: #fff; box-shadow: 0 24px 60px rgba(16, 46, 74, 0.35); transform: rotate(-6deg); animation: flotar 6s ease-in-out infinite; }
+  .contact__card img { width: 78%; height: auto; }
+  .orb { position: absolute; border-radius: 50%; }
+  .orb--1 { width: 26px; height: 26px; background: var(--cielo); top: 14%; left: 22%; }
+  .orb--2 { width: 16px; height: 16px; background: #fff; bottom: 18%; right: 20%; }
+  .orb--3 { width: 38px; height: 38px; border: 3px solid var(--lavanda); bottom: 10%; left: 26%; }
+
+  .contact__closing { position: relative; margin-top: clamp(48px, 7vw, 88px); padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.25); font-family: var(--font-titulo); font-weight: 700; font-size: 1.125rem; }
+
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @keyframes flotar { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+  @media (min-width: 960px) { .contact__grid { grid-template-columns: 1.1fr 0.9fr; gap: 72px; } }
+  @media (max-width: 480px) { .ring--3 { width: 320px; height: 320px; } .ring--2 { width: 270px; height: 270px; } }
+  @media (prefers-reduced-motion: reduce) { .ring, .contact__card { animation: none; } }
 </style>

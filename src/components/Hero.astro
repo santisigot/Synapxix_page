@@ -25,8 +25,8 @@ import { hero } from "../content";
   </div>
 </section>
 <style>
-  /* Ocupa toda la pantalla al entrar: la barra fija mide 72 px, el resto es del hero. */
-  .hero { position: relative; overflow: hidden; display: grid; align-content: center; min-height: calc(100vh - 72px); min-height: calc(100svh - 72px); background: var(--noche); color: #fff; border-radius: 0 0 36px 36px; padding: 48px 0 64px; }
+  /* Ocupa toda la pantalla al entrar, también detrás de la barra (que flota transparente encima). */
+  .hero { position: relative; overflow: hidden; display: grid; align-content: center; min-height: 100vh; min-height: 100svh; background: var(--noche); color: #fff; padding: 120px 0 72px; }
   .hero__glow { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55; pointer-events: none; }
   .hero__glow--a { width: 520px; height: 520px; background: var(--violeta); top: -160px; right: -80px; }
   .hero__glow--b { width: 420px; height: 420px; background: var(--azul); bottom: -200px; left: -120px; opacity: 0.4; }

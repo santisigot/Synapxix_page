@@ -42,7 +42,11 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
   const css = existsSync('dist/_astro')
     ? readdirSync('dist/_astro').filter((f) => f.endsWith('.css')).map((f) => readFileSync(`dist/_astro/${f}`, 'utf8')).join('\n')
     : '';
-  check(/100svh\s*-\s*72px/.test(html + css), 'el hero debe ocupar la pantalla (100svh menos la barra de 72px)');
+  check(/min-height:\s*100svh/.test(html + css), 'el hero debe ocupar toda la pantalla (min-height: 100svh)');
+  check(!/0\s+0\s+36px\s+36px/.test(html + css), 'el hero no debe tener esquinas redondeadas');
+  check(!/clamp\(0px,\s*1\.5vw,\s*20px\)/.test(html + css), 'D.A.L.A. y contacto deben llegar hasta los bordes (sin margen lateral)');
+  check(!/\.contact\{[^}]*border-radius/.test(html + css), 'el contacto no debe tener esquinas redondeadas');
+  check(has('contact__chip'), 'el contacto debe incluir los distintivos (chips)');
 }
 check(/href="mailto:[^"]+"/.test(html), 'falta enlace mailto:');
 check(!/Precio|\$100|Suscrib/i.test(html), 'aparece contenido de precios/suscripción');

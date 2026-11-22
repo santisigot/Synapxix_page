@@ -113,6 +113,8 @@ export const backers: { name: string; role: string }[] = [
 export const contact = {
   title: "Sumá tu escuela a Synapxix",
   text: "Escribinos y coordinamos cómo sumar a tu escuela a las pruebas y a la próxima demo.",
+  eyebrow: "Sumate al proyecto",
   button: "Escribinos",
+  chips: ["Un docente decide", "Privacidad por diseño", "Respaldo de UNER y UNAM"],
   closing: "Bienvenidos a Synapxix.",
 };
