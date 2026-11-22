@@ -42,7 +42,9 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
   <p class="container contact__closing">{contact.closing}</p>
 </section>
 <style>
-  .contact { --btn-text: #fff; --btn-line: #fff; position: relative; overflow: hidden; color: #fff; padding: clamp(72px, 10vw, 140px) 0 clamp(48px, 6vw, 72px); background: var(--violeta); }
+  .contact { --btn-text: #fff; --btn-line: #fff; position: relative; overflow: hidden; color: #fff; background: var(--violeta);
+    /* Como el hero: ocupa toda la pantalla al llegar. El margen negativo anula el scroll-padding de la barra para que el borde superior quede exacto. */
+    display: grid; align-content: center; min-height: 100vh; min-height: 100svh; scroll-margin-top: -88px; padding: 120px 0 56px; }
   .contact__bg { position: absolute; inset: 0; pointer-events: none; }
   .contact__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
   .contact__glow--a { width: 480px; height: 480px; background: var(--lavanda); opacity: 0.4; top: -200px; right: -100px; }

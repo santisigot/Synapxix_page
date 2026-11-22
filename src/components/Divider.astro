@@ -1,0 +1,23 @@
+---
+// Separador mínimo entre secciones contiguas de fondo claro: dos líneas finas con una estrella al centro.
+---
+<div class="container divider" aria-hidden="true">
+  <span class="divider__line divider__line--l"></span>
+  <svg class="divider__star" width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 9.3l-4.9 4.3L17.6 21 12 17.6 6.4 21l1.5-7.4L3 9.3l6.4-.9z" fill="currentColor"/></svg>
+  <span class="divider__line divider__line--r"></span>
+</div>
+<style>
+  .divider { display: flex; align-items: center; gap: 18px; color: var(--violeta); }
+  .divider__line { flex: 1; height: 1px; background: rgba(16, 46, 74, 0.2); }
+  .divider__line--l { transform-origin: right center; }
+  .divider__line--r { transform-origin: left center; }
+  .divider__star { flex-shrink: 0; }
+
+  /* Las líneas se "dibujan" desde el centro al entrar en pantalla; sin JS o sin movimiento se ven completas. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .divider__line { transform: scaleX(0); transition: transform 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955); }
+    :global(.js) .divider__star { opacity: 0; transform: scale(0.4) rotate(-40deg); transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1); }
+    :global(.js) .divider.is-visible .divider__line { transform: none; transition-delay: 0.25s; }
+    :global(.js) .divider.is-visible .divider__star { opacity: 1; transform: none; }
+  }
+</style>

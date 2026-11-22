@@ -56,6 +56,8 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
   check(!/clamp\(0px,\s*1\.5vw,\s*20px\)/.test(html + css), 'D.A.L.A. y contacto deben llegar hasta los bordes (sin margen lateral)');
   check(!/\.contact\{[^}]*border-radius/.test(html + css), 'el contacto no debe tener esquinas redondeadas');
   check(has('contact__chip'), 'el contacto debe incluir los distintivos (chips)');
+  check((`${html}${css}`.match(/min-height:\s*100svh/g) ?? []).length >= 2, 'el hero y el contacto deben ocupar toda la pantalla (min-height: 100svh)');
+  check((html.match(/class="(?:[^"]*\s)?divider(?:\s[^"]*)?"/g) ?? []).length === 3, 'deben verse 3 separadores entre secciones de fondo claro contiguas');
 }
 check(/href="mailto:[^"]+"/.test(html), 'falta enlace mailto:');
 check(!/Precio|\$100|Suscrib/i.test(html), 'aparece contenido de precios/suscripción');
