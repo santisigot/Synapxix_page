@@ -38,6 +38,7 @@ check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 1
 check(/<section[^>]*\sdata-pillars[\s>]/.test(html) && /<canvas[^>]*class="pillars__canvas"/.test(html), 'la sección de pilares debe tener el escenario con el canvas del carrusel 3D');
 check((html.match(/<article[^>]*\sdata-pillar[\s>]/g) ?? []).length === 4, 'los 4 pilares deben seguir en el HTML como listado accesible (respaldo sin WebGL)');
 check(!plano0().includes('Deslizá o arrastrá para explorar') && !html.includes('pillars__hint'), 'la pista "Deslizá o arrastrá para explorar" debe haberse quitado');
+check(!html.includes('pillar__tag') && !html.includes('data-tag='), 'las tarjetas de los pilares no deben llevar la etiqueta de arriba a la derecha (Para estudiantes, Para docentes, etc.)');
 check(!/--pasos/.test(html), 'los pilares ya no usan un recorrido de scroll fijo (la rueda solo desplaza la página)');
 check(!html.includes('WebGLRenderer'), 'three.js no debe cargarse en la página inicial (solo bajo demanda, en un archivo aparte)');
 check(existsSync('dist/_astro') && readdirSync('dist/_astro').some((f) => f.endsWith('.js') && readFileSync(`dist/_astro/${f}`, 'utf8').includes('WebGLRenderer')), 'three.js debe empaquetarse como archivo aparte');

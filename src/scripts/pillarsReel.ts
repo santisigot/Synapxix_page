@@ -8,7 +8,7 @@
 // - Sin WebGL2 o sin JS la sección muestra el listado de tarjetas normal (que también sirve a lectores de pantalla).
 
 type Tono = "cielo" | "lavanda" | "violeta";
-type Pilar = { n: string; title: string; text: string; tag: string; tono: Tono };
+type Pilar = { n: string; title: string; text: string; tono: Tono };
 
 const FONDOS: Record<Tono, [string, string]> = {
   cielo: ["#eaf7ff", "#cdeaff"],
@@ -46,7 +46,6 @@ export function initPillarsReel(): void {
     n: el.dataset.n ?? "",
     title: el.dataset.title ?? "",
     text: el.dataset.text ?? "",
-    tag: el.dataset.tag ?? "",
     tono: (el.dataset.tono as Tono) ?? "cielo",
   }));
   if (pilares.length < 2 || !hayWebGL2()) return; // queda el listado de tarjetas
@@ -350,7 +349,7 @@ function envolver(g: CanvasRenderingContext2D, texto: string, x: number, y: numb
   return yy;
 }
 
-// Portada del pilar: franja superior (logo + etiqueta), número, título y descripción, con el logo grande a la derecha.
+// Portada del pilar: franja superior (logo), número, título y descripción, con el logo grande a la derecha.
 function dibujar(p: Pilar, logo: HTMLImageElement | null): HTMLCanvasElement {
   const W = 2048;
   const H = Math.round(W * (ALTO / ANCHO)); // 1357
@@ -381,15 +380,6 @@ function dibujar(p: Pilar, logo: HTMLImageElement | null): HTMLCanvasElement {
   g.fillStyle = "#102e4a";
   g.font = '700 46px "Plus Jakarta Sans", sans-serif';
   g.fillText("Synapxix", 196, 112);
-  g.font = '700 30px "Plus Jakarta Sans", sans-serif';
-  const etiqueta = p.tag.toUpperCase();
-  const ancho = g.measureText(etiqueta).width + 80;
-  g.fillStyle = "#ffffff";
-  g.beginPath();
-  g.roundRect(W - 96 - ancho, 70, ancho, 84, 42);
-  g.fill();
-  g.fillStyle = "#102e4a";
-  g.fillText(etiqueta, W - 96 - ancho + 40, 113);
   g.fillStyle = "rgba(16, 46, 74, 0.14)";
   g.fillRect(96, 196, W - 192, 3);
 

@@ -24,14 +24,13 @@ const tonos = ["cielo", "lavanda", "violeta", "cielo"];
       {pillars.map((p, i) => (
         <article
           class={`pillar pillar--${tonos[i]} reveal`}
-          data-pillar data-n={p.n} data-title={p.title} data-text={p.text} data-tag={p.tag} data-tono={tonos[i]}
+          data-pillar data-n={p.n} data-title={p.title} data-text={p.text} data-tono={tonos[i]}
         >
           <span class="pillar__n">{p.n}</span>
           <div class="pillar__body">
             <h3>{p.title}</h3>
             <p>{p.text}</p>
           </div>
-          <span class="pillar__tag">{p.tag}</span>
         </article>
       ))}
     </div>
@@ -50,9 +49,8 @@ const tonos = ["cielo", "lavanda", "violeta", "cielo"];
   .pillar__body { display: grid; gap: 12px; }
   .pillar__body h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); }
   .pillar__body p { max-width: 640px; color: rgba(16, 46, 74, 0.82); font-size: 1.0625rem; }
-  .pillar__tag { justify-self: start; padding: 8px 16px; border-radius: var(--radio-pildora); background: #fff; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
   @media (min-width: 860px) {
-    .pillar { grid-template-columns: 110px 1fr auto; align-items: center; padding: 40px; gap: 32px; }
+    .pillar { grid-template-columns: 110px 1fr; align-items: center; padding: 40px; gap: 32px; }
   }
 
   /* ---- Carrusel activo (lo marca el script con data-reel="on"): escenario de una pantalla; la rueda solo baja la página ---- */

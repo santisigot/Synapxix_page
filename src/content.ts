@@ -75,11 +75,11 @@ export const pillarsIntro = {
   title: "Cuatro pilares",
 };
 
-export const pillars: { n: string; title: string; text: string; tag: string }[] = [
-  { n: "01", title: "Experiencia gamificada", text: "Recorridos de aprendizaje con 16 tipos de juegos: lingüísticos, lógicos, espaciales y auditivos.", tag: "Para estudiantes" },
-  { n: "02", title: "Motor adaptativo D.A.L.A.", text: "Decide qué intervención recomendar a partir de evidencia, con trazabilidad completa.", tag: "Aprendizaje adaptativo" },
-  { n: "03", title: "Grafo de conocimiento e IA", text: "Relaciona temas, prerrequisitos y preferencias, y analiza con varios modelos de IA.", tag: "Inteligencia artificial" },
-  { n: "04", title: "Portal docente", text: "Métricas por curso y por estudiante, y revisión humana de cada recomendación.", tag: "Para docentes" },
+export const pillars: { n: string; title: string; text: string }[] = [
+  { n: "01", title: "Experiencia gamificada", text: "Recorridos de aprendizaje con 16 tipos de juegos: lingüísticos, lógicos, espaciales y auditivos." },
+  { n: "02", title: "Motor adaptativo D.A.L.A.", text: "Decide qué intervención recomendar a partir de evidencia, con trazabilidad completa." },
+  { n: "03", title: "Grafo de conocimiento e IA", text: "Relaciona temas, prerrequisitos y preferencias, y analiza con varios modelos de IA." },
+  { n: "04", title: "Portal docente", text: "Métricas por curso y por estudiante, y revisión humana de cada recomendación." },
 ];
 
 export const teachers = {
