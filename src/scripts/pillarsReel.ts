@@ -157,6 +157,7 @@ async function montar(
 
   // ---------- medidas que dependen de la pantalla ----------
   let escala = 1;
+  let baseY = 0; // las tarjetas bajan un poco para dejarle sitio al título arriba
   const ajustar = () => {
     const w = Math.max(1, stage.clientWidth);
     const h = Math.max(1, stage.clientHeight);
@@ -168,6 +169,7 @@ async function montar(
     const frac = w >= 900 ? 0.4 : w <= 520 ? 0.77 : 0.77 + ((w - 520) / 380) * (0.4 - 0.77);
     const k = 2 * Math.tan((FOV * Math.PI) / 360) * camera.aspect;
     escala = (frac * k * CAM_Z) / (ANCHO + frac * k * (PROF_PISTA - 0.28));
+    baseY = -(w >= 900 ? 0.4 : 0.18) * escala;
   };
   ajustar();
   const ro = new ResizeObserver(() => { ajustar(); pedirFrame(); });
@@ -202,7 +204,7 @@ async function montar(
       rel = ((((rel + N / 2) % N) + N) % N) - N / 2; // envuelto a [-N/2, N/2)
       const theta = rel * PASO_ANGULO;
       const rotY = Math.atan2(PROF_PISTA * Math.sin(theta), RADIO_PISTA * Math.cos(theta));
-      m.position.set(Math.sin(theta) * RADIO_PISTA * escala, rel * paso, (Math.cos(theta) * PROF_PISTA - 0.28) * escala);
+      m.position.set(Math.sin(theta) * RADIO_PISTA * escala, rel * paso + baseY, (Math.cos(theta) * PROF_PISTA - 0.28) * escala);
       m.rotation.order = "YXZ";
       m.rotation.set(rel * -0.01 + lean * 0.4, rotY, lean);
       m.scale.setScalar(escala);
