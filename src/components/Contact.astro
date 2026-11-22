@@ -1,0 +1,22 @@
+---
+import Button from "./Button.astro";
+import { contact } from "../content";
+import { CONTACT_EMAIL } from "../config";
+const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
+---
+<section class="contact" id="contacto">
+  <div class="container contact__inner reveal">
+    <h2>{contact.title}</h2>
+    <p>{contact.text}</p>
+    <Button href={`mailto:${CONTACT_EMAIL}?subject=${asunto}`} variant="secondary">{contact.button}</Button>
+    <a class="contact__mail" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+    <p class="contact__closing">{contact.closing}</p>
+  </div>
+</section>
+<style>
+  .contact { background: var(--violeta); color: #fff; border-radius: 36px; margin: 0 clamp(0px, 1.5vw, 20px) clamp(48px, 7vw, 96px); padding: clamp(64px, 9vw, 112px) 0; text-align: center; }
+  .contact__inner { display: grid; gap: 24px; justify-items: center; }
+  .contact__inner > p:not(.contact__closing) { max-width: 560px; font-size: 1.125rem; }
+  .contact__mail { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
+  .contact__closing { font-family: var(--font-titulo); font-weight: 700; margin-top: 8px; opacity: 0.9; }
+</style>

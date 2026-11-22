@@ -1,0 +1,47 @@
+---
+import { backers, backersIntro } from "../content";
+const confirmadas = backers.filter((b) => b.confirmed);
+const resto = backers.filter((b) => !b.confirmed);
+---
+<section class="section backers" id="respaldo">
+  <div class="container">
+    <div class="backers__head reveal">
+      <span class="eyebrow">{backersIntro.eyebrow}</span>
+      <h2>{backersIntro.title}</h2>
+    </div>
+    <div class="backers__featured">
+      {confirmadas.map((b, i) => (
+        <article class={`featured featured--${i === 0 ? "cielo" : "lavanda"} reveal`}>
+          <span class="featured__badge">Confirmada</span>
+          <h3>{b.name}</h3>
+          <p>{b.role}</p>
+        </article>
+      ))}
+    </div>
+    <ul class="backers__list">
+      {resto.map((b) => (
+        <li class="backer reveal">
+          <h4>{b.name}</h4>
+          <p>{b.role}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .backers__featured { display: grid; gap: 20px; margin-top: clamp(32px, 5vw, 56px); }
+  .featured { display: grid; gap: 16px; align-content: start; min-height: 260px; padding: 40px; border-radius: var(--radio-tarjeta); }
+  .featured--cielo { background: var(--cielo-suave); }
+  .featured--lavanda { background: var(--lavanda-suave); }
+  .featured__badge { justify-self: start; padding: 6px 14px; border-radius: var(--radio-pildora); background: #fff; color: var(--violeta); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .featured h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); }
+  .featured p { color: rgba(16, 46, 74, 0.82); font-size: 1.0625rem; }
+  .backers__list { display: grid; gap: 0; margin: 28px 0 0; padding: 0; list-style: none; }
+  .backer { display: grid; gap: 4px; padding: 20px 0; border-top: 1px solid var(--linea); }
+  .backer h4 { font-size: 1.125rem; }
+  .backer p { color: rgba(16, 46, 74, 0.75); }
+  @media (min-width: 860px) {
+    .backers__featured { grid-template-columns: 1fr 1fr; }
+    .backers__list { grid-template-columns: 1fr 1fr; column-gap: 56px; }
+  }
+</style>

@@ -22,6 +22,12 @@ for (const w of ['Gusto', 'Interés', 'Nivel', 'Aprender jugando'])
   check(has(w), `falta "${w}"`);
 check(has('data-target="16"'), 'falta contador de 16 juegos');
 check(has('id="proyecto"'), 'falta id="proyecto"');
+// T5: docentes, respaldo, hoja de ruta, equipo, contacto
+for (const a of ['respaldo', 'equipo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);
+for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'Fernando Hirschfeld', 'Hacia la demo'])
+  check(has(w), `falta "${w}"`);
+check(/href="mailto:[^"]+"/.test(html), 'falta enlace mailto:');
+check(!/Precio|\$100|Suscrib/i.test(html), 'aparece contenido de precios/suscripción');
 // T4: por qué, D.A.L.A., pilares
 check(has('id="como-funciona"'), 'falta id="como-funciona"');
 check(has('id="pilares"'), 'falta id="pilares"');
