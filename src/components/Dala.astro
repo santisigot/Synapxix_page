@@ -2,7 +2,7 @@
 import { dala, dalaSteps } from "../content";
 import SplitText from "./SplitText.astro";
 ---
-<section class="dala" id="como-funciona">
+<section class="dala" id="como-funciona" data-nav="noche">
   <div class="dala__bg" aria-hidden="true">
     <span class="dala__glow dala__glow--a"></span>
     <span class="dala__glow dala__glow--b"></span>
@@ -17,16 +17,20 @@ import SplitText from "./SplitText.astro";
     </div>
     <ol class="dala__steps">
       {dalaSteps.map((s, i) => (
-        <li class="dala__step reveal">
-          <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-          <span class="dala__label">{s}</span>
+        <li class="dala__step reveal" tabindex="0">
+          <div class="dala__card">
+            <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            <span class="dala__label">{s.name}</span>
+            <div class="dala__sum"><p>{s.text}</p></div>
+          </div>
         </li>
       ))}
     </ol>
   </div>
 </section>
 <style>
-  .dala { position: relative; overflow: hidden; color: #fff; padding: clamp(72px, 10vw, 140px) 0; background: linear-gradient(160deg, #0d2740 0%, var(--noche) 45%, #1a2f66 100%); }
+  /* Como el hero y el contacto: ocupa toda la pantalla al llegar (el margen negativo anula el scroll-padding de la barra). */
+  .dala { position: relative; overflow: hidden; color: #fff; display: grid; align-content: center; min-height: 100vh; min-height: 100svh; scroll-margin-top: -88px; padding: 120px 0 72px; background: linear-gradient(160deg, #0d2740 0%, var(--noche) 45%, #1a2f66 100%); }
   .dala__bg { position: absolute; inset: 0; pointer-events: none; }
   .dala__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
   .dala__glow--a { width: 520px; height: 520px; background: var(--violeta); opacity: 0.45; top: -180px; right: -120px; }
@@ -38,29 +42,45 @@ import SplitText from "./SplitText.astro";
   .dala__head { display: grid; gap: 16px; max-width: 720px; }
   .dala__head p { font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); }
 
-  /* Móvil: línea de tiempo vertical */
-  .dala__steps { position: relative; display: grid; gap: 14px; margin: clamp(48px, 7vw, 88px) 0 0; padding: 0 0 0 38px; list-style: none; }
+  /* ---- Base (móvil y pantallas táctiles): línea de tiempo vertical, cada paso con su resumen siempre visible ---- */
+  .dala__steps { position: relative; display: grid; gap: 14px; margin: clamp(40px, 6vw, 72px) 0 0; padding: 0 0 0 38px; list-style: none; }
   .dala__steps::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(to bottom, var(--cielo), var(--violeta), var(--lavanda)); border-radius: 2px; }
-  .dala__step { position: relative; display: flex; align-items: center; gap: 18px; padding: 20px 22px; border-radius: var(--radio-tarjeta); background: linear-gradient(150deg, rgba(113, 90, 255, 0.32), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.16); backdrop-filter: blur(6px); transition: transform 0.25s ease, border-color 0.25s ease; }
-  .dala__step::before { content: ""; position: absolute; left: -35px; top: 50%; translate: 0 -50%; width: 14px; height: 14px; border-radius: 50%; background: var(--cielo); box-shadow: 0 0 0 5px rgba(85, 193, 255, 0.25), 0 0 18px var(--cielo); }
-  .dala__step:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.4); }
+  .dala__step { position: relative; outline: none; }
+  .dala__step::before { content: ""; position: absolute; left: -35px; top: 34px; width: 14px; height: 14px; border-radius: 50%; background: var(--cielo); box-shadow: 0 0 0 5px rgba(85, 193, 255, 0.25), 0 0 18px var(--cielo); }
+  .dala__card { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 18px; padding: 20px 22px; border-radius: var(--radio-tarjeta); background: linear-gradient(150deg, rgba(113, 90, 255, 0.32), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.16); }
   .dala__num { font-family: var(--font-titulo); font-weight: 800; font-size: 2.25rem; line-height: 1; background: linear-gradient(135deg, var(--cielo), var(--lavanda)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: 1.25rem; }
+  .dala__sum { grid-column: 1 / -1; display: grid; grid-template-rows: 1fr; }
+  .dala__sum p { min-height: 0; overflow: hidden; padding-top: 8px; font-size: 0.9375rem; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
 
-  /* Tablet: tarjetas en 3 columnas, sin línea */
+  /* ---- Tablet y escritorio: 3 columnas; los resúmenes se ven siempre si no hay mouse (táctil) ---- */
   @media (min-width: 720px) {
     .dala__steps { grid-template-columns: repeat(3, 1fr); padding-left: 0; gap: 18px; }
     .dala__steps::before, .dala__step::before { display: none; }
-    .dala__step { display: grid; gap: 22px; align-content: space-between; min-height: 150px; }
+    .dala__card { grid-template-columns: 1fr; align-content: start; gap: 12px; padding: 24px 22px; height: 100%; }
   }
 
-  /* Escritorio: línea de tiempo horizontal con nodos luminosos */
+  /* ---- Con mouse: la tarjeta se agranda de verdad (ancho y alto reales, sin scale: el texto sigue nítido) y muestra el resumen ---- */
+  @media (min-width: 720px) and (hover: hover) {
+    .dala__step { height: 160px; }
+    .dala__card { position: absolute; inset: 0 0 auto 0; transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), right 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease; }
+    .dala__sum { grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease; }
+    .dala__step:hover, .dala__step:focus-visible { z-index: 5; }
+    .dala__step:hover .dala__card, .dala__step:focus-visible .dala__card {
+      left: -22px; right: -22px; height: auto; min-height: 100%;
+      background: linear-gradient(150deg, #6a53f2, #34269f); border-color: rgba(255, 255, 255, 0.45); box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4);
+    }
+    .dala__step:hover .dala__sum, .dala__step:focus-visible .dala__sum { grid-template-rows: 1fr; opacity: 1; }
+  }
+  .dala__step:focus-visible .dala__card { outline: 2px solid var(--cielo); outline-offset: 4px; }
+
+  /* ---- Escritorio ancho: línea de tiempo horizontal con nodos luminosos ---- */
   @media (min-width: 1100px) {
     .dala__steps { grid-template-columns: repeat(6, 1fr); padding-top: 48px; gap: 16px; }
     .dala__steps::before { display: block; left: 0; right: 0; top: 11px; bottom: auto; width: auto; height: 2px; background: linear-gradient(to right, var(--cielo), var(--violeta), var(--lavanda)); }
-    .dala__step::before { display: block; left: 24px; top: -44px; translate: 0 0; }
+    .dala__step::before { display: block; left: 24px; top: -44px; }
     .dala__step:nth-child(even) { margin-top: 28px; }
-    .dala__step { min-height: 170px; }
   }
-  @media (prefers-reduced-motion: reduce) { .dala__step { transition: none; } .dala__step:hover { transform: none; } }
+  @media (min-width: 1100px) and (hover: hover) { .dala__step { height: 176px; } }
+  @media (prefers-reduced-motion: reduce) { .dala__card, .dala__sum { transition: none; } }
 </style>

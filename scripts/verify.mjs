@@ -45,7 +45,9 @@ check(!/(triad__card|why__card)[^"]*reveal/.test(html), 'las tarjetas ya no debe
 check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 2, 'debe haber 2 tarjetas interactivas: una en el hero y otra en el contacto');
 check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 2, 'cada tarjeta debe exponer una descripción accesible');
 check(has('hstage--noche') && has('hstage--violeta'), 'la tarjeta del hero debe ser azul noche y la del contacto violeta (que combine con su fondo)');
-check(has('is-violet'), 'la barra de navegación debe tomar el color violeta del contacto al llegar a esa sección');
+check(has('dataset.tone') && (html.match(/<section[^>]*\sdata-nav="/g) ?? []).length === 2, 'la barra debe tomar el color de D.A.L.A. (noche) y del contacto (violeta): 2 secciones con data-nav');
+check((html.match(/class="dala__sum"/g) ?? []).length === 6, 'cada uno de los 6 pasos de D.A.L.A. debe tener su resumen');
+check((html.match(/<li[^>]*class="dala__step[^"]*"[^>]*tabindex="0"/g) ?? []).length === 6, 'los 6 pasos deben poder enfocarse con teclado (tabindex=0) para ver su resumen');
 check(!has('hchip'), 'las etiquetas flotantes (Gusto, Interés, Nivel) deben haberse quitado');
 check((html.match(/class="hspark/g) ?? []).length >= 3, 'debe haber destellos sutiles alrededor de la tarjeta');
 check(!has('hero__card') && !has('contact__art'), 'las ilustraciones estáticas anteriores deben haberse reemplazado');
@@ -71,7 +73,7 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
   const tilt = (html + css).match(/\.tilt__card[^{]*\{[^}]*\}/g) ?? [];
   check(tilt.length > 0, 'debe existir el estilo compartido .tilt__card');
   check(!tilt.some((r) => /will-change|filter:|scale\(/.test(r)), '.tilt__card no debe usar will-change, filter ni scale() (el texto se ve borroso)');
-  check((`${html}${css}`.match(/min-height:\s*100svh/g) ?? []).length >= 2, 'el hero y el contacto deben ocupar toda la pantalla (min-height: 100svh)');
+  check((`${html}${css}`.match(/min-height:\s*100svh/g) ?? []).length >= 3, 'el hero, D.A.L.A. y el contacto deben ocupar toda la pantalla (min-height: 100svh)');
   check((html.match(/class="(?:[^"]*\s)?divider(?:\s[^"]*)?"/g) ?? []).length === 3, 'deben verse 3 separadores entre secciones de fondo claro contiguas');
 }
 check(/href="mailto:[^"]+"/.test(html), 'falta enlace mailto:');

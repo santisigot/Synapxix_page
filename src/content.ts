@@ -60,13 +60,14 @@ export const dala = {
   text: "Dynamic Adaptive Learning Architecture: cada decisión se puede rastrear de punta a punta.",
 };
 
-export const dalaSteps: string[] = [
-  "Evidencia",
-  "Estado",
-  "Decisión",
-  "Intervención",
-  "Resultado",
-  "Actualización",
+// Resúmenes breves que se muestran al pasar el mouse por cada paso (redactados a partir de la presentación).
+export const dalaSteps: { name: string; text: string }[] = [
+  { name: "Evidencia", text: "Se recoge lo que el estudiante hace al jugar. Es el punto de partida de todo lo demás." },
+  { name: "Estado", text: "Con esa evidencia se estima su gusto, su interés y su nivel. Ningún estado existe sin la evidencia que lo originó." },
+  { name: "Decisión", text: "El motor decide qué intervención recomendar a partir de la evidencia, con trazabilidad completa." },
+  { name: "Intervención", text: "Se propone la actividad o el ajuste. En modo sombra la IA recomienda y una persona aprueba o corrige." },
+  { name: "Resultado", text: "Se observa cómo respondió el estudiante a esa intervención." },
+  { name: "Actualización", text: "Con ese resultado se actualiza lo que sabemos del estudiante, y cada cambio queda registrado." },
 ];
 
 export const pillarsIntro = {

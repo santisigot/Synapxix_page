@@ -44,12 +44,15 @@ import { nav, ctaLabel } from "../content";
   :global(.js) .nav:not(.is-solid) .nav__links a:hover { color: var(--cielo); }
   .nav.is-solid { box-shadow: 0 1px 0 rgba(16, 46, 74, 0.08); }
 
-  /* Sobre "Sumate al proyecto" la barra toma el violeta de la sección (casi opaco para no mezclarse con el texto que pasa por debajo). */
-  .nav.is-violet { --btn-text: #fff; --btn-line: #fff; background: rgba(113, 90, 255, 0.86); backdrop-filter: blur(10px); color: #fff; box-shadow: none; }
-  .nav.is-violet .nav__logo--dark { display: none; }
-  .nav.is-violet .nav__logo--light { display: block; }
-  .nav.is-violet .nav__links a:hover { color: rgba(255, 255, 255, 0.75); }
-  .nav.is-violet .nav__mobile a:not(.btn) { border-bottom-color: rgba(255, 255, 255, 0.25); }
+  /* Sobre las secciones con color propio (data-nav) la barra toma ese color: azul noche en D.A.L.A., violeta en el contacto.
+     Casi opaca para no mezclarse con el texto que pasa por debajo. */
+  .nav[data-tone] { --btn-text: #fff; --btn-line: #fff; backdrop-filter: blur(10px); color: #fff; box-shadow: none; }
+  .nav[data-tone="noche"] { background: rgba(16, 46, 74, 0.9); }
+  .nav[data-tone="violeta"] { background: rgba(113, 90, 255, 0.86); }
+  .nav[data-tone] .nav__logo--dark { display: none; }
+  .nav[data-tone] .nav__logo--light { display: block; }
+  .nav[data-tone] .nav__links a:hover { color: rgba(255, 255, 255, 0.75); }
+  .nav[data-tone] .nav__mobile a:not(.btn) { border-bottom-color: rgba(255, 255, 255, 0.25); }
 
   @media (min-width: 960px) {
     .nav__links, .nav__cta { display: flex; }
@@ -61,16 +64,20 @@ import { nav, ctaLabel } from "../content";
   const toggle = document.querySelector<HTMLButtonElement>(".nav__toggle");
   const menu = document.getElementById("menu-movil");
 
-  const contacto = document.getElementById("contacto");
+  // Secciones que le dan su color a la barra mientras están justo debajo (atributo data-nav="noche" | "violeta").
+  const zonas = [...document.querySelectorAll<HTMLElement>("[data-nav]")];
 
   const actualizar = () => {
     const abierto = toggle?.getAttribute("aria-expanded") === "true";
     nav?.classList.toggle("is-solid", window.scrollY > 24 || abierto);
-    // ¿La sección de contacto está justo debajo de la barra? Entonces la barra toma su color.
-    if (nav && contacto) {
-      const r = contacto.getBoundingClientRect();
+    if (nav) {
       const centro = nav.offsetHeight / 2;
-      nav.classList.toggle("is-violet", r.top <= centro && r.bottom > centro);
+      const zona = zonas.find((z) => {
+        const r = z.getBoundingClientRect();
+        return r.top <= centro && r.bottom > centro;
+      });
+      if (zona?.dataset.nav) nav.dataset.tone = zona.dataset.nav;
+      else delete nav.dataset.tone;
     }
   };
   const cerrar = () => {
