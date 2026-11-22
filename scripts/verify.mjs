@@ -16,6 +16,12 @@ for (const a of ['#proyecto', '#como-funciona', '#pilares', '#respaldo', '#equip
   check(has(`href="${a}"`), `falta ancla de menú ${a}`);
 check(has('logo-azul.png'), 'falta logo azul');
 check(has('logo-claro.png'), 'falta logo claro');
+// T3: hero, banda, about
+check(has('Educación personalizada con juego e inteligencia artificial'), 'falta título del hero');
+for (const w of ['Gusto', 'Interés', 'Nivel', 'Aprender jugando'])
+  check(has(w), `falta "${w}"`);
+check(has('data-target="16"'), 'falta contador de 16 juegos');
+check(has('id="proyecto"'), 'falta id="proyecto"');
 
 if (failures.length) {
   console.error('verify: FALLÓ\n - ' + failures.join('\n - '));

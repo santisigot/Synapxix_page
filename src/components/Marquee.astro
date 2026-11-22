@@ -1,0 +1,26 @@
+---
+import { marquee } from "../content";
+---
+<div class="marquee" aria-label="Lo que nos define">
+  <div class="marquee__track">
+    {[0, 1].map((copy) => (
+      <ul class="marquee__group" aria-hidden={copy === 1 ? "true" : undefined}>
+        {marquee.map((item) => (
+          <li>
+            <span>{item}</span>
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9.3l-4.9 4.3L17.6 21 12 17.6 6.4 21l1.5-7.4L3 9.3l6.4-.9z" fill="currentColor"/></svg>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
+<style>
+  .marquee { overflow: hidden; background: var(--cielo); color: var(--noche); padding: 22px 0; margin-top: -1px; }
+  .marquee__track { display: flex; width: max-content; animation: desplazar 32s linear infinite; }
+  .marquee__group { display: flex; flex-shrink: 0; gap: 40px; margin: 0; padding: 0 20px; list-style: none; }
+  .marquee li { display: flex; align-items: center; gap: 40px; font-family: var(--font-titulo); font-weight: 700; font-size: clamp(1.25rem, 2.6vw, 1.75rem); white-space: nowrap; }
+  .marquee svg { color: var(--violeta); }
+  @keyframes desplazar { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+</style>
