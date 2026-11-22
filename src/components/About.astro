@@ -15,7 +15,6 @@ const tonos = ["cielo", "lavanda", "violeta"];
           <div class="counter">
             <dt>
               <span class="counter__num" data-target={c.target} data-final={c.display}>{c.display}</span>
-              {c.target !== undefined && <span class="counter__plus">+</span>}
             </dt>
             <dd>{c.label}</dd>
           </div>
@@ -40,7 +39,6 @@ const tonos = ["cielo", "lavanda", "violeta"];
   .about__counters { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0; }
   .counter { padding: 24px 8px; border-top: 1px solid var(--linea); }
   .counter dt { font-family: var(--font-titulo); font-weight: 700; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1; color: var(--violeta); }
-  .counter__plus { margin-left: 2px; }
   .counter dd { margin: 10px 0 0; font-size: 0.9375rem; color: rgba(16, 46, 74, 0.75); }
   .triad { display: grid; gap: 20px; margin-top: clamp(48px, 7vw, 88px); }
   .triad__card { display: grid; gap: 14px; align-content: start; min-height: 240px; padding: 36px; border-radius: var(--radio-tarjeta); }

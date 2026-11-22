@@ -21,6 +21,7 @@ check(has('Educación personalizada con juego e inteligencia artificial'), 'falt
 for (const w of ['Gusto', 'Interés', 'Nivel', 'Aprender jugando'])
   check(has(w), `falta "${w}"`);
 check(has('data-target="16"'), 'falta contador de 16 juegos');
+check(!/counter__plus/.test(html), 'los contadores no deben llevar "+" (la presentación da cifras exactas)');
 check(has('id="proyecto"'), 'falta id="proyecto"');
 // T5: docentes, respaldo, hoja de ruta, equipo, contacto
 for (const a of ['respaldo', 'equipo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);

@@ -1,43 +1,35 @@
-# Astro Starter Kit: Minimal
+# Synapxix — Landing
 
-```sh
-npm create astro@latest -- --template minimal
+Landing estática de Synapxix para colegios y docentes. Hecha con [Astro](https://astro.build).
+
+## Probarla en tu computadora
+
+```powershell
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Se abre en http://localhost:4321.
 
-## 🚀 Project Structure
+## Qué cambiar antes de publicar
 
-Inside of your Astro project, you'll see the following folders and files:
+- **Correo de contacto:** `src/config.ts` (`CONTACT_EMAIL`). Hoy es un correo de ejemplo.
+- **Textos de la página:** `src/content.ts`. Todo el contenido está ahí.
+- **Colores y medidas:** variables al principio de `src/styles/global.css`.
+- **Imagen al compartir el enlace (`public/og.png`):** cuando tengas dominio, agregá `site: "https://tu-dominio"` en `astro.config.mjs` para que las redes la tomen bien.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+## Verificar que todo está bien
+
+```powershell
+npm run verify
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Construye el sitio y comprueba que estén las secciones, los enlaces y los logos.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Publicar en Vercel
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. Entrá a https://vercel.com/new e importá el repositorio `Synapxix_page`.
+2. Vercel detecta Astro solo: dejá todo como está.
+3. Tocá **Deploy**.
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+No hace falta `vercel.json`. Cada `git push` a `main` vuelve a publicar la página.
