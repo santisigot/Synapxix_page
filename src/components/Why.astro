@@ -1,0 +1,43 @@
+---
+import Button from "./Button.astro";
+import { why, principles } from "../content";
+const tonos = ["cielo", "lavanda", "blanco"];
+---
+<section class="section why">
+  <div class="container">
+    <div class="why__top reveal">
+      <div>
+        <span class="eyebrow">{why.eyebrow}</span>
+        <h2>{why.title}</h2>
+      </div>
+      <div class="why__side">
+        <p>{why.text}</p>
+        <Button href="#contacto">Hablemos</Button>
+      </div>
+    </div>
+    <div class="why__cards">
+      {principles.map((p, i) => (
+        <article class={`why__card why__card--${tonos[i]} reveal`}>
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .why__top { display: grid; gap: 28px; align-items: end; }
+  .why__side { display: grid; gap: 24px; justify-items: start; }
+  .why__side p { max-width: 520px; font-size: 1.0625rem; color: rgba(16, 46, 74, 0.78); }
+  .why__cards { display: grid; gap: 20px; margin-top: clamp(40px, 6vw, 72px); }
+  .why__card { display: grid; gap: 16px; align-content: start; min-height: 260px; padding: 40px; border-radius: var(--radio-tarjeta); }
+  .why__card h3 { font-size: clamp(1.5rem, 2.4vw, 1.875rem); }
+  .why__card p { color: rgba(16, 46, 74, 0.8); }
+  .why__card--cielo { background: var(--cielo-suave); }
+  .why__card--lavanda { background: var(--lavanda-suave); }
+  .why__card--blanco { background: #fff; }
+  @media (min-width: 860px) {
+    .why__top { grid-template-columns: 1fr 1fr; gap: 72px; }
+    .why__cards { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

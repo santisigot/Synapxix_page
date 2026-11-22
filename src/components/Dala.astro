@@ -1,0 +1,35 @@
+---
+import { dala, dalaSteps } from "../content";
+---
+<section class="dala" id="como-funciona">
+  <div class="container">
+    <div class="dala__head reveal">
+      <span class="eyebrow">{dala.eyebrow}</span>
+      <h2>{dala.title}</h2>
+      <p>{dala.text}</p>
+    </div>
+    <ol class="dala__steps">
+      {dalaSteps.map((s, i) => (
+        <li class="dala__step reveal">
+          <span class="dala__n">{i + 1}</span>
+          <span class="dala__label">{s}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+<style>
+  .dala { background: var(--noche); color: #fff; border-radius: 36px; margin: 0 clamp(0px, 1.5vw, 20px); padding: clamp(64px, 9vw, 120px) 0; }
+  .dala .eyebrow { color: var(--cielo); }
+  .dala__head { display: grid; gap: 16px; max-width: 720px; }
+  .dala__head p { font-size: 1.125rem; color: rgba(255, 255, 255, 0.78); }
+  .dala__steps { display: grid; gap: 14px; margin: clamp(40px, 6vw, 72px) 0 0; padding: 0; list-style: none; grid-template-columns: 1fr 1fr; }
+  .dala__step { position: relative; display: grid; gap: 14px; align-content: start; padding: 24px 20px; border-radius: var(--radio-tarjeta); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); }
+  .dala__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--violeta); color: #fff; font-family: var(--font-titulo); font-weight: 700; }
+  .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: 1.125rem; overflow-wrap: anywhere; }
+  @media (min-width: 720px) { .dala__steps { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1100px) {
+    .dala__steps { grid-template-columns: repeat(6, 1fr); }
+    .dala__step:not(:last-child)::after { content: ""; position: absolute; top: 44px; right: -15px; width: 14px; height: 2px; background: var(--cielo); }
+  }
+</style>
