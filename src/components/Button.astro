@@ -18,7 +18,6 @@ const { href, variant = "primary" } = Astro.props;
 </a>
 <style>
   .btn {
-    --sombra: #4a37c4;
     --estrella: var(--cielo);
     position: relative;
     display: inline-flex; align-items: center; gap: 16px;
@@ -46,17 +45,14 @@ const { href, variant = "primary" } = Astro.props;
   .btn__star { position: absolute; top: -12px; right: -6px; width: 24px; height: 24px; color: var(--estrella); transform: scale(0) rotate(-40deg); transition: transform 0.35s cubic-bezier(0.3, 1.8, 0.5, 1); pointer-events: none; }
   .btn:hover .btn__star { transform: scale(1) rotate(14deg); }
 
-  .btn:hover { transform: translateY(2px) rotate(-1.5deg); }
-  .btn:active { transform: translateY(5px) rotate(0); }
+  /* Sin sombra: el botón se levanta e inclina al pasar el mouse y se achica al hacer clic. */
+  .btn:hover { transform: translateY(-3px) rotate(-1.5deg); }
+  .btn:active { transform: scale(0.96); }
 
-  .btn--primary { background: var(--violeta); color: #fff; box-shadow: 0 5px 0 var(--sombra), 0 14px 28px rgba(113, 90, 255, 0.4); }
-  .btn--primary:hover { box-shadow: 0 3px 0 var(--sombra), 0 8px 20px rgba(113, 90, 255, 0.45); }
-  .btn--primary:active { box-shadow: 0 0 0 var(--sombra), 0 4px 10px rgba(113, 90, 255, 0.4); }
+  .btn--primary { background: var(--violeta); color: #fff; }
   .btn--primary .btn__icon { background: #fff; color: var(--violeta); }
 
-  .btn--secondary { --estrella: var(--lavanda); background: #fff; color: var(--noche); box-shadow: 0 5px 0 var(--cielo), 0 14px 28px rgba(16, 46, 74, 0.25); }
-  .btn--secondary:hover { box-shadow: 0 3px 0 var(--cielo), 0 8px 20px rgba(16, 46, 74, 0.28); }
-  .btn--secondary:active { box-shadow: 0 0 0 var(--cielo), 0 4px 10px rgba(16, 46, 74, 0.25); }
+  .btn--secondary { --estrella: var(--lavanda); background: #fff; color: var(--noche); }
   .btn--secondary .btn__icon { background: var(--violeta); color: #fff; }
 
   .btn:focus-visible { outline: 3px solid var(--cielo); outline-offset: 4px; }
