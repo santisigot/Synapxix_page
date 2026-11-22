@@ -1,7 +1,9 @@
-// Carrusel 3D curvo de los pilares, controlado por el scroll (WebGL con three.js, cargado bajo demanda).
+// Carrusel 3D curvo de los pilares (WebGL con three.js, cargado bajo demanda).
 // - Cada pilar es una tarjeta: un plano de 48x24 segmentos curvado como un cilindro en el vertex shader,
 //   con esquinas redondeadas (SDF antialiasada) y una textura dibujada con las fuentes y colores del sitio.
-// - La "fase" es un índice flotante que persigue al scroll del recorrido (amortiguada con 1 - exp(-13 dt)).
+// - Se maneja arrastrando (mouse o dedo) o con las flechas del teclado; al soltar se asienta en el pilar más cercano.
+//   La rueda del mouse NO se intercepta: solo desplaza la página.
+// - La "fase" es un índice flotante que persigue a la meta (amortiguada con 1 - exp(-13 dt)).
 // - Un único requestAnimationFrame; se detiene al ocultar la pestaña o salir de pantalla.
 // - Sin WebGL2 o sin JS la sección muestra el listado de tarjetas normal (que también sirve a lectores de pantalla).
 
@@ -175,11 +177,10 @@ async function montar(
   const ro = new ResizeObserver(() => { ajustar(); pedirFrame(); });
   ro.observe(stage);
 
-  // ---------- fase (índice flotante) y objetivo (progreso del scroll) ----------
+  // ---------- meta (la fija el usuario) y fase (índice flotante que la persigue) ----------
+  // Los índices son circulares: se puede seguir girando sin tope.
+  let meta = 0;
   let fase = 0;
-  const run = () => Math.max(1, section.offsetHeight - stage.clientHeight);
-  const objetivo = () => clamp(-section.getBoundingClientRect().top / run(), 0, 1) * (N - 1);
-  fase = objetivo();
 
   let indiceVisible = -1;
   const describir = (i: number) => {
@@ -190,14 +191,13 @@ async function montar(
   };
 
   const actualizar = (dt: number, ahora: number) => {
-    const meta = objetivo();
     if (reducido) fase = meta;
     else fase += (meta - fase) * (1 - Math.exp(-13 * dt));
-    const vel = meta - fase; // "velocidad" aproximada: lo que falta por recorrer
+    const vel = meta - fase; // lo que falta por recorrer, como medida de "velocidad"
     const bend = 0.3 + clamp(Math.abs(vel) * 0.12, 0, 0.12);
     const lean = reducido ? 0 : clamp(vel * 0.05, -0.1, 0.1);
     const paso = 0.52 * escala;
-    describir(clamp(Math.round(fase), 0, N - 1));
+    describir((((Math.round(fase) % N) + N) % N));
 
     tarjetas.forEach((m, i) => {
       let rel = i - fase;
@@ -248,55 +248,48 @@ async function montar(
   document.addEventListener("visibilitychange", () => { if (document.hidden) parar(); else pedirFrame(); }, opt);
   pedirFrame();
 
-  // ---------- navegación: el scroll del recorrido es la única fuente de verdad ----------
-  const topAbsoluto = () => window.scrollY + section.getBoundingClientRect().top;
-  const irA = (indice: number) => {
-    const i = clamp(Math.round(indice), 0, N - 1);
-    window.scrollTo({ top: topAbsoluto() + (i * run()) / (N - 1), behavior: reducido ? "auto" : "smooth" });
-  };
-
-  // Al soltar o dejar de hacer scroll, la fase se asienta en el proyecto más cercano
-  let arrastrando = false;
-  let temporizador = 0;
-  const asentar = () => {
-    if (arrastrando) return;
-    const p = -section.getBoundingClientRect().top / run();
-    if (p <= 0 || p >= 1) return; // fuera del recorrido no se interviene
-    const i = clamp(Math.round(p * (N - 1)), 0, N - 1);
-    const y = topAbsoluto() + (i * run()) / (N - 1);
-    if (Math.abs(window.scrollY - y) > 6) window.scrollTo({ top: y, behavior: reducido ? "auto" : "smooth" });
-  };
-  window.addEventListener("scroll", () => { pedirFrame(); window.clearTimeout(temporizador); temporizador = window.setTimeout(asentar, 170); }, { ...opt, passive: true });
-
-  // Arrastre horizontal: izquierda avanza. Se traduce a scroll para no tener dos fuentes de verdad.
-  let ox = 0;
+  // ---------- arrastre: izquierda avanza; al soltar se asienta en el pilar más cercano ----------
+  // La rueda no se intercepta (solo baja la página). touch-action: pan-y deja el scroll vertical al navegador.
   let pid: number | null = null;
+  let ox = 0;
+  let velocidad = 0; // pilares por segundo, suavizada
+  let tPrev = 0;
+  const unPilar = () => Math.max(1, stage.clientWidth * 0.45); // píxeles de arrastre por pilar
+
   canvas.addEventListener("pointerdown", (e) => {
-    pid = e.pointerId; ox = e.clientX; arrastrando = true;
+    pid = e.pointerId; ox = e.clientX; velocidad = 0; tPrev = performance.now();
     try { canvas.setPointerCapture(e.pointerId); } catch { /* ya liberado */ }
+    pedirFrame();
   }, opt);
   canvas.addEventListener("pointermove", (e) => {
     if (e.pointerId !== pid) return;
-    const dx = e.clientX - ox; ox = e.clientX;
-    const unProyecto = Math.max(1, stage.clientWidth * 0.45); // píxeles de arrastre por proyecto
-    window.scrollBy({ top: (-dx * run()) / (N - 1) / unProyecto, behavior: "auto" });
+    const ahora = performance.now();
+    const d = (-(e.clientX - ox)) / unPilar();
+    ox = e.clientX;
+    meta += d;
+    const dts = Math.max(0.001, (ahora - tPrev) / 1000);
+    velocidad = 0.8 * velocidad + 0.2 * (d / dts);
+    tPrev = ahora;
   }, opt);
   const soltar = (e: PointerEvent) => {
     if (e.pointerId !== pid) return;
-    pid = null; arrastrando = false;
+    pid = null;
     try { canvas.releasePointerCapture(e.pointerId); } catch { /* ya liberado */ }
-    asentar();
+    // pequeña inercia: un lanzamiento rápido puede saltar como máximo un pilar más
+    meta = Math.round(meta + (reducido ? 0 : clamp(velocidad * 0.18, -1, 1)));
   };
   canvas.addEventListener("pointerup", soltar, opt);
   canvas.addEventListener("pointercancel", soltar, opt);
   canvas.addEventListener("lostpointercapture", soltar, opt);
 
-  // Teclado: flechas avanzan un proyecto completo; Inicio vuelve al primero. Hacer clic no abre nada.
+  // Teclado: flechas izquierda/derecha avanzan un pilar completo; Inicio vuelve al primero.
+  // (Arriba/abajo no se tocan: siguen desplazando la página.) Hacer clic no abre nada.
   canvas.addEventListener("keydown", (e) => {
-    const actual = clamp(Math.round(objetivo()), 0, N - 1);
-    if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown") { e.preventDefault(); irA(actual + 1); }
-    else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); irA(actual - 1); }
-    else if (e.key === "Home") { e.preventDefault(); irA(0); }
+    if (e.key === "ArrowRight") { e.preventDefault(); meta = Math.round(meta) + 1; }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); meta = Math.round(meta) - 1; }
+    else if (e.key === "Home") { e.preventDefault(); meta = Math.round(meta / N) * N; }
+    else return;
+    pedirFrame();
   }, opt);
 
   // ---------- limpieza ----------
@@ -305,7 +298,6 @@ async function montar(
     parar();
     io.disconnect();
     ro.disconnect();
-    window.clearTimeout(temporizador);
     geometria.dispose();
     tarjetas.forEach((m) => (m.material as import("three").Material).dispose());
     texturas.forEach((t) => t.dispose());

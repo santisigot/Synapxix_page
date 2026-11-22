@@ -73,7 +73,6 @@ export const dalaSteps: { name: string; text: string }[] = [
 export const pillarsIntro = {
   eyebrow: "Cómo está construido",
   title: "Cuatro pilares",
-  hint: "Deslizá o arrastrá para explorar",
 };
 
 export const pillars: { n: string; title: string; text: string; tag: string }[] = [
