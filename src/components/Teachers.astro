@@ -1,6 +1,6 @@
 ---
 import Button from "./Button.astro";
-import { teachers, teacherBenefits } from "../content";
+import { teachers, teacherBenefits, ctaLabel } from "../content";
 const icons = {
   chart: "M4 20V10M10 20V4M16 20v-7M22 20H2",
   check: "M5 12.5l4.5 4.5L19 7.5",
@@ -17,7 +17,7 @@ const icons = {
       </div>
       <div class="teachers__side">
         <p>{teachers.text}</p>
-        <Button href="#contacto">Sumá tu escuela</Button>
+        <Button href="#contacto">{ctaLabel}</Button>
       </div>
     </div>
     <div class="teachers__grid">

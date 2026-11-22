@@ -16,7 +16,7 @@ Se abre en http://localhost:4321.
 - **Correo de contacto:** `src/config.ts` (`CONTACT_EMAIL`). Hoy es un correo de ejemplo.
 - **Textos de la página:** `src/content.ts`. Todo el contenido está ahí.
 - **Colores y medidas:** variables al principio de `src/styles/global.css`.
-- **Imagen al compartir el enlace (`public/og.png`):** cuando tengas dominio, agregá `site: "https://tu-dominio"` en `astro.config.mjs` para que las redes la tomen bien.
+- **Imagen al compartir el enlace (`public/og.png`):** cuando tengas dominio, agregá `site: "https://tu-dominio"` dentro de `defineConfig({ ... })` en `astro.config.mjs`. Con eso la imagen y la URL salen absolutas y las redes la toman bien.
 
 ## Verificar que todo está bien
 

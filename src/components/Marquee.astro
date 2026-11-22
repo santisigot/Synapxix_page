@@ -1,10 +1,10 @@
 ---
 import { marquee } from "../content";
 ---
-<div class="marquee" aria-label="Lo que nos define">
+<div class="marquee" role="region" aria-label="Lo que nos define">
   <div class="marquee__track">
-    {[0, 1].map((copy) => (
-      <ul class="marquee__group" aria-hidden={copy === 1 ? "true" : undefined}>
+    {[0, 1, 2, 3].map((copy) => (
+      <ul class="marquee__group" aria-hidden={copy > 0 ? "true" : undefined}>
         {marquee.map((item) => (
           <li>
             <span>{item}</span>

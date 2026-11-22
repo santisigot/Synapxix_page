@@ -28,7 +28,7 @@ export const marquee: string[] = [
 export const counters: { display: string; target?: number; label: string }[] = [
   { display: "16", target: 16, label: "tipos de juegos: lingüísticos, lógicos, espaciales y auditivos" },
   { display: "4", target: 4, label: "pilares que sostienen la plataforma" },
-  { display: "8", target: 8, label: "instituciones académicas detrás del proyecto" },
+  { display: "8", target: 8, label: "instituciones y actores tecnológicos vinculados al proyecto" },
   { display: "7–9", label: "años: edad de los chicos que ya lo están probando" },
 ];
 
@@ -117,7 +117,7 @@ export const roadmapIntro = {
 };
 
 export const roadmap: { when: string; text: string }[] = [
-  { when: "Hoy", text: "Hay tests en curso con niños de 7 a 9 años, sobre una infraestructura sólida." },
+  { when: "Hoy", text: "Hay pruebas en curso con chicos de 7 a 9 años, sobre una infraestructura sólida." },
   { when: "Próximamente", text: "Una demo construida sobre esa base, y estudios científicos con UNER y UNAM." },
   { when: "Más allá", text: "Una plataforma agnóstica a la edad y al contenido." },
 ];

@@ -7,7 +7,7 @@ const tonos = ["cielo", "lavanda", "violeta"];
     <div class="about__top">
       <div class="reveal">
         <span class="eyebrow">Sobre Synapxix</span>
-        <h3>{about.title}</h3>
+        <h2>{about.title}</h2>
         <p class="about__text">{about.text}</p>
       </div>
       <dl class="about__counters reveal">
@@ -26,7 +26,7 @@ const tonos = ["cielo", "lavanda", "violeta"];
       {triad.map((t, i) => (
         <article class={`triad__card triad__card--${tonos[i]} reveal`}>
           <span class="triad__n">0{i + 1}</span>
-          <h4>{t.title}</h4>
+          <h3>{t.title}</h3>
           <p>{t.text}</p>
         </article>
       ))}
@@ -46,7 +46,8 @@ const tonos = ["cielo", "lavanda", "violeta"];
   .triad__card--lavanda { background: var(--lavanda-suave); }
   .triad__card--violeta { background: var(--violeta-suave); }
   .triad__n { font-family: var(--font-titulo); font-weight: 700; color: var(--violeta); }
-  .triad__card h4 { font-size: 1.75rem; }
+  .about h2 { font-size: clamp(1.75rem, 3.4vw, 2.375rem); font-weight: 600; line-height: 1.2; }
+  .triad__card h3 { font-size: 1.75rem; font-weight: 700; }
   .triad__card p { color: rgba(16, 46, 74, 0.8); }
   @media (min-width: 860px) {
     .about__top { grid-template-columns: 1fr 1fr; align-items: center; gap: 72px; }

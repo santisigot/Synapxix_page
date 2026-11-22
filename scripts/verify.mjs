@@ -23,6 +23,12 @@ for (const w of ['Gusto', 'Interés', 'Nivel', 'Aprender jugando'])
 check(has('data-target="16"'), 'falta contador de 16 juegos');
 check(!/counter__plus/.test(html), 'los contadores no deben llevar "+" (la presentación da cifras exactas)');
 check(has('id="proyecto"'), 'falta id="proyecto"');
+// Revisión final
+check(html.search(/<h2/) !== -1 && html.search(/<h2/) < html.search(/<h[34]/), 'el primer título tras el h1 debe ser h2 (no saltar niveles)');
+check((html.match(/class="marquee__group/g) ?? []).length >= 4, 'la banda necesita 4 copias para cubrir pantallas anchas');
+check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul rompe la regla de contraste');
+check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
+if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
 // T5: docentes, respaldo, hoja de ruta, equipo, contacto
 for (const a of ['respaldo', 'equipo', 'contacto']) check(has(`id="${a}"`), `falta id="${a}"`);
 for (const w of ['Universidad Nacional de Entre Ríos', 'UNAM', 'Fernando Hirschfeld', 'Hacia la demo'])

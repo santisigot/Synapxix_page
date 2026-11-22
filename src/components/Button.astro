@@ -27,4 +27,8 @@ const { href, variant = "primary" } = Astro.props;
   .btn--primary .btn__icon { background: #fff; color: var(--violeta); }
   .btn--secondary { background: #fff; color: var(--noche); }
   .btn--secondary .btn__icon { background: var(--violeta); color: #fff; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .btn__icon { transition: none; }
+    .btn:hover, .btn:hover .btn__icon { transform: none; }
+  }
 </style>

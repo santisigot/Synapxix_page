@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
+// Las redes exigen una URL absoluta: se usa cuando `site` está definido en astro.config.mjs.
+const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
 ---
 <!doctype html>
 <html lang="es">
@@ -17,7 +19,9 @@ const { title, description } = Astro.props;
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/og.png" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImage} />
+    {Astro.site && <meta property="og:url" content={Astro.url.href} />}
     <meta property="og:locale" content="es_AR" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
