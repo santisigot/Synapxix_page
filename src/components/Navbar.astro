@@ -44,6 +44,13 @@ import { nav, ctaLabel } from "../content";
   :global(.js) .nav:not(.is-solid) .nav__links a:hover { color: var(--cielo); }
   .nav.is-solid { box-shadow: 0 1px 0 rgba(16, 46, 74, 0.08); }
 
+  /* Sobre "Sumate al proyecto" la barra toma el violeta de la sección (casi opaco para no mezclarse con el texto que pasa por debajo). */
+  .nav.is-violet { --btn-text: #fff; --btn-line: #fff; background: rgba(113, 90, 255, 0.86); backdrop-filter: blur(10px); color: #fff; box-shadow: none; }
+  .nav.is-violet .nav__logo--dark { display: none; }
+  .nav.is-violet .nav__logo--light { display: block; }
+  .nav.is-violet .nav__links a:hover { color: rgba(255, 255, 255, 0.75); }
+  .nav.is-violet .nav__mobile a:not(.btn) { border-bottom-color: rgba(255, 255, 255, 0.25); }
+
   @media (min-width: 960px) {
     .nav__links, .nav__cta { display: flex; }
     .nav__toggle, .nav__mobile { display: none; }
@@ -54,9 +61,17 @@ import { nav, ctaLabel } from "../content";
   const toggle = document.querySelector<HTMLButtonElement>(".nav__toggle");
   const menu = document.getElementById("menu-movil");
 
+  const contacto = document.getElementById("contacto");
+
   const actualizar = () => {
     const abierto = toggle?.getAttribute("aria-expanded") === "true";
     nav?.classList.toggle("is-solid", window.scrollY > 24 || abierto);
+    // ¿La sección de contacto está justo debajo de la barra? Entonces la barra toma su color.
+    if (nav && contacto) {
+      const r = contacto.getBoundingClientRect();
+      const centro = nav.offsetHeight / 2;
+      nav.classList.toggle("is-violet", r.top <= centro && r.bottom > centro);
+    }
   };
   const cerrar = () => {
     toggle?.setAttribute("aria-expanded", "false");
