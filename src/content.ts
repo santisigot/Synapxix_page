@@ -3,7 +3,6 @@ export const nav: { label: string; href: string }[] = [
   { label: "Cómo funciona", href: "#como-funciona" },
   { label: "Pilares", href: "#pilares" },
   { label: "Respaldo", href: "#respaldo" },
-  { label: "Equipo", href: "#equipo" },
 ];
 
 export const ctaLabel = "Sumá tu escuela";
@@ -100,38 +99,15 @@ export const backersIntro = {
   title: "Una red académica detrás del producto",
 };
 
-export const backers: { name: string; role: string; confirmed: boolean }[] = [
-  { name: "Universidad Nacional de Entre Ríos", role: "Estudios y papers sobre salud mental y ambiental.", confirmed: true },
-  { name: "UNAM, México", role: "Estudios y papers de psicopedagogía.", confirmed: true },
-  { name: "Polo Tecnológico La Nube", role: "Vínculo entre universidades, escuelas y actores tecnológicos.", confirmed: false },
-  { name: "UADER", role: "Articulación académica y práctica educativa.", confirmed: false },
-  { name: "UTN", role: "Instrumentación conductual y ciencia de datos.", confirmed: false },
-  { name: "Universidad de Concepción del Uruguay", role: "Adopción docente del aprendizaje adaptativo.", confirmed: false },
-  { name: "Universidad Militar Nueva Granada", role: "Narrativas interactivas y diseño multimedia.", confirmed: false },
-  { name: "Politécnico Grancolombiano", role: "Tecnologías adaptativas y analítica del aprendizaje.", confirmed: false },
-];
-
-export const roadmapIntro = {
-  eyebrow: "Qué sigue",
-  title: "Hacia la demo",
-};
-
-export const roadmap: { when: string; text: string }[] = [
-  { when: "Hoy", text: "Hay pruebas en curso con chicos de 7 a 9 años, sobre una infraestructura sólida." },
-  { when: "Próximamente", text: "Una demo construida sobre esa base, y estudios científicos con UNER y UNAM." },
-  { when: "Más allá", text: "Una plataforma agnóstica a la edad y al contenido." },
-];
-
-export const teamIntro = {
-  eyebrow: "El equipo",
-  title: "Tres equipos, un producto",
-  pm: "Fernando Hirschfeld, project manager, coordina a los tres equipos.",
-};
-
-export const team: { name: string; role: string; area: string; text: string }[] = [
-  { name: "Sofia Perez", role: "Team lead", area: "Videojuego", text: "Las experiencias de juego que viven los estudiantes." },
-  { name: "Santiago Sigot", role: "Team lead", area: "Frontend", text: "Las interfaces para estudiantes y docentes, y las redes sociales." },
-  { name: "Felipe Schenberger", role: "Team lead", area: "Backend", text: "La API, el motor D.A.L.A. y los datos." },
+export const backers: { name: string; role: string }[] = [
+  { name: "Universidad Nacional de Entre Ríos", role: "Estudios y papers sobre salud mental y ambiental." },
+  { name: "UNAM, México", role: "Estudios y papers de psicopedagogía." },
+  { name: "Polo Tecnológico La Nube", role: "Vínculo entre universidades, escuelas y actores tecnológicos." },
+  { name: "UADER", role: "Articulación académica y práctica educativa." },
+  { name: "UTN", role: "Instrumentación conductual y ciencia de datos." },
+  { name: "Universidad de Concepción del Uruguay", role: "Adopción docente del aprendizaje adaptativo." },
+  { name: "Universidad Militar Nueva Granada", role: "Narrativas interactivas y diseño multimedia." },
+  { name: "Politécnico Grancolombiano", role: "Tecnologías adaptativas y analítica del aprendizaje." },
 ];
 
 export const contact = {

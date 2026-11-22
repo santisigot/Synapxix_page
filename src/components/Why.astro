@@ -1,7 +1,7 @@
 ---
 import Button from "./Button.astro";
 import { why, principles } from "../content";
-const tonos = ["cielo", "lavanda", "blanco"];
+const tonos = ["cielo", "lavanda", "violeta"];
 ---
 <section class="section why">
   <div class="container">
@@ -35,7 +35,8 @@ const tonos = ["cielo", "lavanda", "blanco"];
   .why__card p { color: rgba(16, 46, 74, 0.8); }
   .why__card--cielo { background: var(--cielo-suave); }
   .why__card--lavanda { background: var(--lavanda-suave); }
-  .why__card--blanco { background: #fff; }
+  .why__card--violeta { background: var(--violeta); }
+  .why__card--violeta, .why__card--violeta p { color: #fff; }
   @media (min-width: 860px) {
     .why__top { grid-template-columns: 1fr 1fr; gap: 72px; }
     .why__cards { grid-template-columns: repeat(3, 1fr); }

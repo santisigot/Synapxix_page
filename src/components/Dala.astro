@@ -2,7 +2,13 @@
 import { dala, dalaSteps } from "../content";
 ---
 <section class="dala" id="como-funciona">
-  <div class="container">
+  <div class="dala__bg" aria-hidden="true">
+    <span class="dala__glow dala__glow--a"></span>
+    <span class="dala__glow dala__glow--b"></span>
+    <span class="dala__glow dala__glow--c"></span>
+    <span class="dala__grid"></span>
+  </div>
+  <div class="container dala__inner">
     <div class="dala__head reveal">
       <span class="eyebrow">{dala.eyebrow}</span>
       <h2>{dala.title}</h2>
@@ -11,7 +17,7 @@ import { dala, dalaSteps } from "../content";
     <ol class="dala__steps">
       {dalaSteps.map((s, i) => (
         <li class="dala__step reveal">
-          <span class="dala__n">{i + 1}</span>
+          <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
           <span class="dala__label">{s}</span>
         </li>
       ))}
@@ -19,18 +25,41 @@ import { dala, dalaSteps } from "../content";
   </div>
 </section>
 <style>
-  .dala { background: var(--noche); color: #fff; border-radius: 36px; margin: 0 clamp(0px, 1.5vw, 20px); padding: clamp(64px, 9vw, 120px) 0; }
+  .dala { position: relative; overflow: hidden; color: #fff; padding: clamp(72px, 10vw, 140px) 0; background: linear-gradient(160deg, #0d2740 0%, var(--noche) 45%, #1a2f66 100%); }
+  .dala__bg { position: absolute; inset: 0; pointer-events: none; }
+  .dala__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
+  .dala__glow--a { width: 520px; height: 520px; background: var(--violeta); opacity: 0.45; top: -180px; right: -120px; }
+  .dala__glow--b { width: 420px; height: 420px; background: var(--azul); opacity: 0.3; bottom: -160px; left: -140px; }
+  .dala__glow--c { width: 300px; height: 300px; background: var(--cielo); opacity: 0.18; top: 40%; left: 42%; }
+  .dala__grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent); }
+  .dala__inner { position: relative; }
   .dala .eyebrow { color: var(--cielo); }
   .dala__head { display: grid; gap: 16px; max-width: 720px; }
-  .dala__head p { font-size: 1.125rem; color: rgba(255, 255, 255, 0.78); }
-  .dala__steps { display: grid; gap: 12px; margin: clamp(40px, 6vw, 72px) 0 0; padding: 0; list-style: none; grid-template-columns: 1fr; }
-  .dala__step { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--radio-tarjeta); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); }
-  @media (min-width: 720px) { .dala__step { display: grid; gap: 14px; align-content: start; padding: 24px 20px; } }
-  .dala__n { flex-shrink: 0; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--violeta); color: #fff; font-family: var(--font-titulo); font-weight: 700; }
-  .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: 1.125rem; }
-  @media (min-width: 720px) { .dala__steps { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 1100px) {
-    .dala__steps { grid-template-columns: repeat(6, 1fr); }
-    .dala__step:not(:last-child)::after { content: ""; position: absolute; top: 44px; right: -15px; width: 14px; height: 2px; background: var(--cielo); }
+  .dala__head p { font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); }
+
+  /* Móvil: línea de tiempo vertical */
+  .dala__steps { position: relative; display: grid; gap: 14px; margin: clamp(48px, 7vw, 88px) 0 0; padding: 0 0 0 38px; list-style: none; }
+  .dala__steps::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(to bottom, var(--cielo), var(--violeta), var(--lavanda)); border-radius: 2px; }
+  .dala__step { position: relative; display: flex; align-items: center; gap: 18px; padding: 20px 22px; border-radius: var(--radio-tarjeta); background: linear-gradient(150deg, rgba(113, 90, 255, 0.32), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.16); backdrop-filter: blur(6px); transition: transform 0.25s ease, border-color 0.25s ease; }
+  .dala__step::before { content: ""; position: absolute; left: -35px; top: 50%; translate: 0 -50%; width: 14px; height: 14px; border-radius: 50%; background: var(--cielo); box-shadow: 0 0 0 5px rgba(85, 193, 255, 0.25), 0 0 18px var(--cielo); }
+  .dala__step:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.4); }
+  .dala__num { font-family: var(--font-titulo); font-weight: 800; font-size: 2.25rem; line-height: 1; background: linear-gradient(135deg, var(--cielo), var(--lavanda)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: 1.25rem; }
+
+  /* Tablet: tarjetas en 3 columnas, sin línea */
+  @media (min-width: 720px) {
+    .dala__steps { grid-template-columns: repeat(3, 1fr); padding-left: 0; gap: 18px; }
+    .dala__steps::before, .dala__step::before { display: none; }
+    .dala__step { display: grid; gap: 22px; align-content: space-between; min-height: 150px; }
   }
+
+  /* Escritorio: línea de tiempo horizontal con nodos luminosos */
+  @media (min-width: 1100px) {
+    .dala__steps { grid-template-columns: repeat(6, 1fr); padding-top: 48px; gap: 16px; }
+    .dala__steps::before { display: block; left: 0; right: 0; top: 11px; bottom: auto; width: auto; height: 2px; background: linear-gradient(to right, var(--cielo), var(--violeta), var(--lavanda)); }
+    .dala__step::before { display: block; left: 24px; top: -44px; translate: 0 0; }
+    .dala__step:nth-child(even) { margin-top: 28px; }
+    .dala__step { min-height: 170px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .dala__step { transition: none; } .dala__step:hover { transform: none; } }
 </style>
