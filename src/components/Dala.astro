@@ -21,14 +21,17 @@ import SplitText from "./SplitText.astro";
     <!-- Filas desplegables nativas: sin JavaScript abren y cierran igual (details/summary). El script solo anima la altura. -->
     <div class="dala__list">
       {dalaSteps.map((s, i) => (
-        <details class="dala__row reveal" open={i === 0}>
-          <summary class="dala__sum">
-            <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-            <span class="dala__label">{s.name}</span>
-            <span class="dala__icon" aria-hidden="true"></span>
-          </summary>
-          <div class="dala__answer"><p>{s.text}</p></div>
-        </details>
+        <!-- Contenedor exterior: la entrada animada (settle, escalonada) va aquí para no interferir con las transiciones de la fila -->
+        <div class="dala__item settle" style={`--k:${i}`}>
+          <details class="dala__row" open={i === 0}>
+            <summary class="dala__sum">
+              <span class="dala__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <span class="dala__label">{s.name}</span>
+              <span class="dala__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="dala__answer"><p>{s.text}</p></div>
+          </details>
+        </div>
       ))}
     </div>
   </div>
@@ -64,7 +67,8 @@ import SplitText from "./SplitText.astro";
   .dala__sum:focus-visible { outline: 2px solid var(--cielo); outline-offset: 3px; }
   .dala__num { font-family: var(--font-titulo); font-weight: 800; font-size: 1.875rem; line-height: 1; min-width: 3.2rem; background: linear-gradient(135deg, var(--cielo), var(--lavanda)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .dala__label { font-family: var(--font-titulo); font-weight: 700; font-size: clamp(1.125rem, 2.2vw, 1.5rem); }
-  .dala__icon { margin-left: auto; flex-shrink: 0; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(85, 193, 255, 0.65); color: var(--cielo); font-family: var(--font-titulo); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+  /* Solo el símbolo + / −, sin círculo ni botón */
+  .dala__icon { margin-left: auto; flex-shrink: 0; width: 1.75rem; text-align: center; color: var(--cielo); font-family: var(--font-titulo); font-weight: 600; font-size: 2rem; line-height: 1; }
   .dala__icon::before { content: "+"; }
   .dala__row[data-intent="open"] .dala__icon::before,
   .dala__row[open]:not([data-intent]) .dala__icon::before { content: "−"; }

@@ -33,7 +33,9 @@ if (html.includes('.example')) console.warn('verify: AVISO — el correo de cont
 // 18 tarjetas con efecto: 3 Gusto/Interés/Nivel + 3 Por qué + 4 Docentes + 8 Respaldo (los Pilares usan el carrusel 3D)
 check((html.match(/class="split"/g) ?? []).length === 43, 'deben animarse 43 textos con SplitText: 7 títulos de sección + título y texto de las 18 tarjetas');
 check((html.match(/<(?:div|li)[^>]*\sdata-tilt[\s>]/g) ?? []).length === 18, 'las 18 tarjetas deben ser inclinables (data-tilt)');
-check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 18, 'las 18 tarjetas deben entrar con el efecto "settle" (como el texto)');
+// 18 tarjetas inclinables + 6 filas de D.A.L.A. entran con "settle" (como el texto)
+check((html.match(/<(?:div|li)[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 24, 'las 18 tarjetas y las 6 filas de D.A.L.A. deben entrar con el efecto "settle" (como el texto)');
+check(!/class="dala__row[^"]*\breveal\b/.test(html), 'las filas de D.A.L.A. no deben usar el fundido simple (.reveal)');
 // Pilares: carrusel 3D curvo controlado por el scroll (WebGL), con listado accesible de respaldo
 check(/<section[^>]*\sdata-pillars[\s>]/.test(html) && /<canvas[^>]*class="pillars__canvas"/.test(html), 'la sección de pilares debe tener el escenario con el canvas del carrusel 3D');
 check((html.match(/<article[^>]*\sdata-pillar[\s>]/g) ?? []).length === 4, 'los 4 pilares deben seguir en el HTML como listado accesible (respaldo sin WebGL)');
@@ -95,6 +97,7 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
     const reglas = [...(html + css).matchAll(new RegExp(`\\.${sec}(?:\\[[^\\]]*\\])?\\{[^}]*\\}`, 'g'))].map((m) => m[0]);
     check(reglas.some((r) => /overflow:\s*clip/.test(r)), `.${sec} debe usar overflow: clip (con hidden la sección se desplaza por dentro)`);
   }
+  check(!(html + css).match(/\.dala__icon(?:\[[^\]]*\])?\{[^}]*(border|border-radius)/), 'el + / − de las filas debe ir solo, sin círculo ni borde');
   check(!/left:\s*-22px/.test(html + css), 'la carta ampliada no debe desbordarse sobre la vecina (nada de left:-22px)');
   check(/scroll-snap-type:\s*y\s+proximity/.test(html + css) && /scroll-snap-align:\s*start/.test(html + css), 'el hero, D.A.L.A. y el contacto deben imantarse a la pantalla (scroll-snap)');
   // Texto nítido: la tarjeta inclinable no puede usar will-change, filter ni scale() (ablandan el texto al animarse).
