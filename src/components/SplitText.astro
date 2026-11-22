@@ -1,11 +1,11 @@
 ---
 // Divide un texto en palabras al construir el sitio. Cada palabra queda dentro de una máscara
 // y "se asienta" (sube y gira) al entrar en pantalla. El texto sigue siendo texto normal.
-interface Props { text: string; }
-const { text } = Astro.props;
+interface Props { text: string; delay?: number; }
+const { text, delay = 0 } = Astro.props;
 const palabras = text.split(/\s+/).filter(Boolean);
 ---
-<span class="split">{palabras.map((p, i) => (
+<span class="split" style={delay ? `--base:${delay}ms` : undefined}>{palabras.map((p, i) => (
   <><span class="w"><span class="w__i" style={`--i:${i}`}>{p}</span></span>{i < palabras.length - 1 ? " " : ""}</>
 ))}</span>
 <style>
@@ -18,7 +18,7 @@ const palabras = text.split(/\s+/).filter(Boolean);
     :global(.js) .w__i {
       transform: translateY(110%) rotate(5deg);
       transition: transform 600ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
-      transition-delay: calc(var(--i) * 70ms);
+      transition-delay: calc(var(--base, 0ms) + var(--i) * 70ms);
     }
     :global(.js) .split.is-visible .w__i { transform: none; }
   }

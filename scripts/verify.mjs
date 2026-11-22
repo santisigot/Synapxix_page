@@ -30,7 +30,10 @@ check(!/background:var\(--azul\);color:#fff/.test(html), 'blanco sobre Azul romp
 check(!/instituciones académicas/.test(html), 'el contador no debe llamar "académicas" al Polo Tecnológico');
 if (html.includes('.example')) console.warn('verify: AVISO — el correo de contacto sigue siendo el de ejemplo (src/config.ts).');
 // Efecto de palabras que se asientan en los títulos de sección
-check((html.match(/class="split"/g) ?? []).length === 7, 'deben animarse exactamente los 7 títulos de sección con SplitText');
+check((html.match(/class="split"/g) ?? []).length === 13, 'deben animarse 13 textos con SplitText: 7 títulos de sección + título y texto de las 3 tarjetas');
+check((html.match(/<div[^>]*\sdata-tilt[\s>]/g) ?? []).length === 3, 'las 3 tarjetas (Gusto, Interés, Nivel) deben ser inclinables (data-tilt)');
+check((html.match(/<div[^>]*class="[^"]*\bsettle\b/g) ?? []).length === 3, 'las 3 tarjetas deben entrar con el efecto "settle" (como el texto)');
+check(!/triad__card[^"]*reveal/.test(html), 'las tarjetas ya no deben usar el fundido simple (.reveal)');
 {
   const h1 = (html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? [])[1] ?? '';
   check(h1.length > 0 && !h1.includes('split'), 'el título del hero no debe usar SplitText');

@@ -25,11 +25,13 @@ const tonos = ["cielo", "lavanda", "violeta"];
 
     <div class="triad">
       {triad.map((t, i) => (
-        <article class={`triad__card triad__card--${tonos[i]} reveal`}>
-          <span class="triad__n">0{i + 1}</span>
-          <h3>{t.title}</h3>
-          <p>{t.text}</p>
-        </article>
+        <div class="tilt settle" data-tilt style={`--k:${i}`}>
+          <article class={`triad__card triad__card--${tonos[i]}`}>
+            <span class="triad__n">0{i + 1}</span>
+            <h3><SplitText text={t.title} delay={320 + i * 150} /></h3>
+            <p><SplitText text={t.text} delay={420 + i * 150} /></p>
+          </article>
+        </div>
       ))}
     </div>
   </div>
@@ -42,7 +44,22 @@ const tonos = ["cielo", "lavanda", "violeta"];
   .counter dt { font-family: var(--font-titulo); font-weight: 700; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1; color: var(--violeta); }
   .counter dd { margin: 10px 0 0; font-size: 0.9375rem; color: rgba(16, 46, 74, 0.75); }
   .triad { display: grid; gap: 20px; margin-top: clamp(48px, 7vw, 88px); }
-  .triad__card { display: grid; gap: 14px; align-content: start; min-height: 240px; padding: 36px; border-radius: var(--radio-tarjeta); }
+  /* Entrada: la tarjeta "se asienta" como el texto (sube y gira, 600ms, misma curva, 150ms entre tarjetas). */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .settle { opacity: 0; transform: translateY(48px) rotate(5deg); transform-origin: left top;
+      transition: transform 600ms cubic-bezier(0.455, 0.03, 0.515, 0.955), opacity 500ms ease; transition-delay: calc(var(--k) * 150ms); }
+    :global(.js) .settle.is-visible { opacity: 1; transform: none; }
+  }
+
+  /* Inclinación 2.5D con el mouse (sin reflejos): perspectiva 1500px + una cara que se mueve. */
+  .tilt { --rx: 0deg; --ry: 0deg; --tz: 0px; --s: 1; --hover: 0; display: grid; perspective: 1500px; touch-action: pan-y; }
+  .triad__card {
+    display: grid; gap: 14px; align-content: start; min-height: 240px; padding: 36px; border-radius: var(--radio-tarjeta);
+    transform: translateZ(var(--tz)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s));
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease; will-change: transform;
+    filter: drop-shadow(0 calc(4px + 18px * var(--hover)) calc(10px + 24px * var(--hover)) rgba(16, 46, 74, calc(0.05 + 0.17 * var(--hover))));
+  }
+  @media (prefers-reduced-motion: reduce) { .triad__card { transition: none; } }
   .triad__card--cielo { background: var(--cielo-suave); }
   .triad__card--lavanda { background: var(--lavanda-suave); }
   .triad__card--violeta { background: var(--violeta-suave); }
@@ -55,3 +72,7 @@ const tonos = ["cielo", "lavanda", "violeta"];
     .triad { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
+<script>
+  import { initTilt } from "../scripts/tilt";
+  initTilt();
+</script>
