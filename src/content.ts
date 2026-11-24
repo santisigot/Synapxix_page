@@ -8,11 +8,8 @@ export const nav: { label: string; href: string }[] = [
 export const ctaLabel = "Sumá tu escuela";
 
 export const hero = {
-  title: "Educación personalizada con juego e inteligencia artificial",
-  subtitle:
-    "Synapxix adapta el aprendizaje a cada estudiante según su gusto, su interés y su nivel, y siempre con un docente que decide.",
-  cta: ctaLabel,
-  secondary: "Conocé el proyecto",
+  name: "Synapxix",
+  phrase: "Educación personalizada con juego e inteligencia artificial",
 };
 
 export const marquee: string[] = [
@@ -120,15 +117,36 @@ export const contact = {
   closing: "Bienvenidos a Synapxix.",
 };
 
-// Instituciones que se muestran alrededor del logo en el hero (nombres tal como figuran en la presentación).
-// `mono` es el monograma que se dibuja en la tarjeta hasta contar con los logos oficiales.
-export const unis: { mono: string; name: string }[] = [
-  { mono: "UNER", name: "Universidad Nacional de Entre Ríos" },
-  { mono: "UNAM", name: "UNAM, México" },
-  { mono: "UADER", name: "UADER" },
-  { mono: "UTN", name: "UTN" },
-  { mono: "UCU", name: "Universidad de Concepción del Uruguay" },
-  { mono: "UMNG", name: "Universidad Militar Nueva Granada" },
-  { mono: "PG", name: "Politécnico Grancolombiano" },
-  { mono: "LN", name: "Polo Tecnológico La Nube" },
+// Cosas clave del proyecto que flotan (desordenadas) por la pantalla al entrar, y se dispersan al hacer scroll.
+//  kind: uni (institución) | pilar (los 4 pilares) | dato (dato clave, violeta) | dato2 (dato clave, celeste)
+//  x, y: posición en escritorio (% de la pantalla); mx, my: posición en móvil (si falta, no se muestra en móvil)
+//  r: giro en grados; z: "profundidad" (cuánto se mueve al dispersarse). `mono` es el monograma hasta tener los logos oficiales.
+export type Flotante = {
+  kind: "uni" | "pilar" | "dato" | "dato2";
+  text: string;
+  mono?: string;
+  n?: string;
+  big?: string;
+  x: number; y: number; r: number; z: number;
+  mx?: number; my?: number;
+};
+
+export const floaters: Flotante[] = [
+  { kind: "uni", mono: "UNER", text: "Universidad Nacional de Entre Ríos", x: 6, y: 19, r: -4, z: 1.1, mx: 6, my: 31 },
+  { kind: "uni", mono: "UNAM", text: "UNAM, México", x: 70, y: 14, r: 3, z: 0.9, mx: 50, my: 9 },
+  { kind: "uni", mono: "UADER", text: "UADER", x: 24, y: 12, r: 2, z: 1.3 },
+  { kind: "uni", mono: "UTN", text: "UTN", x: 80, y: 33, r: -3, z: 1.2, mx: 56, my: 66 },
+  { kind: "uni", mono: "UCU", text: "Universidad de Concepción del Uruguay", x: 3, y: 45, r: 3, z: 0.8, mx: 50, my: 84 },
+  { kind: "uni", mono: "UMNG", text: "Universidad Militar Nueva Granada", x: 74, y: 60, r: -2, z: 1.0 },
+  { kind: "uni", mono: "PG", text: "Politécnico Grancolombiano", x: 12, y: 79, r: -3, z: 1.2 },
+  { kind: "uni", mono: "LN", text: "Polo Tecnológico La Nube", x: 58, y: 85, r: 4, z: 0.9 },
+  { kind: "pilar", n: pillars[0].n, text: pillars[0].title, x: 27, y: 30, r: -5, z: 1.4, mx: 4, my: 12 },
+  { kind: "pilar", n: pillars[1].n, text: pillars[1].title, x: 60, y: 24, r: 4, z: 1.0, mx: 4, my: 67 },
+  { kind: "pilar", n: pillars[2].n, text: pillars[2].title, x: 20, y: 62, r: 3, z: 1.3 },
+  { kind: "pilar", n: pillars[3].n, text: pillars[3].title, x: 68, y: 73, r: -4, z: 1.1, mx: 2, my: 88 },
+  { kind: "dato", big: "16", text: "tipos de juegos", x: 44, y: 11, r: 2, z: 0.9, mx: 34, my: 22 },
+  { kind: "dato", text: "Un docente decide", x: 80, y: 48, r: -5, z: 1.2, mx: 52, my: 30 },
+  { kind: "dato2", text: "Privacidad por diseño", x: 36, y: 87, r: 3, z: 1.0, mx: 20, my: 76 },
+  { kind: "dato2", big: "7–9", text: "años de edad", x: 7, y: 31, r: 5, z: 0.8 },
+  { kind: "dato", text: "Todo es trazable", x: 82, y: 84, r: 3, z: 1.0 },
 ];

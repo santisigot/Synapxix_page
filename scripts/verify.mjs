@@ -58,20 +58,22 @@ check(!/why__card--violeta[^{]*\{[^}]*background:\s*var\(--violeta\)\s*[;}]/.tes
 check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 1, 'debe quedar 1 sola tarjeta interactiva (la del contacto)');
 check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 1, 'la tarjeta debe exponer una descripción accesible');
 check(has('hstage--violeta'), 'la tarjeta del contacto debe ser violeta (que combine con su fondo)');
-// Hero: animación de arranque (anillo -> logo -> texto -> instituciones alrededor)
+// Hero: solo el logo cargando -> cosas clave flotando -> (scroll) se dispersan -> logo + Synapxix + una frase. Sin degradados.
 {
   const hero = (html.match(/<section[^>]*class="hero[^"]*"[\s\S]*?<\/section>/) ?? [''])[0];
   check(hero.length > 0, 'debe existir la sección del hero');
-  check(/data-hero/.test(hero) && /class="hero__ring"/.test(hero) && /class="hero__tile"/.test(hero), 'el hero debe tener el anillo de carga y la pieza del logo');
-  check((hero.match(/<li[^>]*class="uni"/g) ?? []).length === 8, 'el hero debe mostrar las 8 instituciones alrededor del logo');
-  check(/aria-label="Universidades[^"]*"/.test(hero), 'la lista de instituciones del hero debe tener nombre accesible');
-  check(!/data-foil-card/.test(hero), 'la tarjeta foil ya no va en el hero');
+  check(/data-hero/.test(hero) && /class="hero__logo"/.test(hero), 'el hero debe tener el logo (que se carga al entrar)');
+  check((hero.match(/<li[^>]*class="floater[^"]*"/g) ?? []).length === 17, 'el hero debe tener 17 elementos flotantes (universidades, pilares y datos clave)');
+  check(/<ul[^>]*class="hero__floaters"[^>]*aria-hidden="true"/.test(hero), 'los flotantes son decorativos (la información ya está en las secciones): aria-hidden');
+  check(/<h1[^>]*>\s*Synapxix\s*<\/h1>/.test(hero), 'el hero debe mostrar "Synapxix" como título principal');
   const plano = hero.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-  for (const n of ['Universidad Nacional de Entre Ríos', 'UNAM, México', 'UADER', 'UTN', 'Universidad de Concepción del Uruguay', 'Universidad Militar Nueva Granada', 'Politécnico Grancolombiano', 'Polo Tecnológico La Nube'])
-    check(plano.includes(n), `el hero debe nombrar a "${n}"`);
-  check(plano.includes('Educación personalizada con juego e inteligencia artificial'), 'el hero conserva su título');
+  check(plano.includes('Educación personalizada con juego e inteligencia artificial'), 'el hero debe llevar una frase (la propuesta del proyecto)');
+  check(!/<a[\s>]/.test(hero), 'el hero ya no lleva botones ni enlaces: solo logo, Synapxix y la frase');
+  check(!/data-foil-card/.test(hero), 'la tarjeta foil no va en el hero');
+  for (const n of ['Universidad Nacional de Entre Ríos', 'UNAM, México', 'UADER', 'UTN', 'Universidad de Concepción del Uruguay', 'Universidad Militar Nueva Granada', 'Politécnico Grancolombiano', 'Polo Tecnológico La Nube', 'Experiencia gamificada', 'Portal docente'])
+    check(plano.includes(n), `entre los flotantes debe estar "${n}"`);
 }
-check(has('dataset.tone') && (html.match(/<section[^>]*\sdata-nav="/g) ?? []).length === 2, 'la barra debe tomar el color de D.A.L.A. (noche) y del contacto (violeta): 2 secciones con data-nav');
+check(has('dataset.tone') && (html.match(/<section[^>]*\sdata-nav="/g) ?? []).length === 3, 'la barra debe tomar el color del hero y D.A.L.A. (noche) y del contacto (violeta): 3 secciones con data-nav');
 // D.A.L.A.: 6 filas desplegables nativas (<details>/<summary>), con respuesta animada por script
 check((html.match(/<details[^>]*class="dala__row[^"]*"/g) ?? []).length === 6, 'los 6 pasos de D.A.L.A. deben ser filas <details> nativas');
 check((html.match(/<summary[^>]*class="dala__sum"/g) ?? []).length === 6, 'cada fila debe tener su <summary> nativo (accesible con Enter/Espacio)');
@@ -111,6 +113,12 @@ check(!/why__card--blanco/.test(html), 'la tarjeta "Un docente decide" no puede 
     check(reglas.some((r) => /overflow:\s*clip/.test(r)), `.${sec} debe usar overflow: clip (con hidden la sección se desplaza por dentro)`);
   }
   check(!(html + css).match(/\.dala__icon(?:\[[^\]]*\])?\{[^}]*(border|border-radius)/), 'el + / − de las filas debe ir solo, sin círculo ni borde');
+  {
+    // El hero nuevo no debe usar degradados (ni brillos difusos): fondo y colores planos
+    const reglas = [...(html + css).matchAll(/\.(?:hero|floater|fl-)[^{}]*\{[^}]*\}/g)].map((m) => m[0]);
+    check(reglas.length > 0, 'debe haber estilos del hero');
+    check(!reglas.some((r) => /gradient\(|blur\(/.test(r.replace(/backdrop-filter:[^;}]*/g, ''))), 'el hero no debe usar degradados ni brillos difusos (se ve "demasiado IA")');
+  }
   check(!/left:\s*-22px/.test(html + css), 'la carta ampliada no debe desbordarse sobre la vecina (nada de left:-22px)');
   check(/scroll-snap-type:\s*y\s+proximity/.test(html + css) && /scroll-snap-align:\s*start/.test(html + css), 'el hero, D.A.L.A. y el contacto deben imantarse a la pantalla (scroll-snap)');
   // Texto nítido: la tarjeta inclinable no puede usar will-change, filter ni scale() (ablandan el texto al animarse).

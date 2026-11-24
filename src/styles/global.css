@@ -83,5 +83,5 @@ p { margin: 0; }
    así no asoma la sección siguiente (clara) por abajo. */
 @media (min-width: 960px) and (hover: hover) {
   html { scroll-snap-type: y proximity; }
-  .hero, .dala, .contact { scroll-snap-align: start; }
+  .dala, .contact { scroll-snap-align: start; }
 }
