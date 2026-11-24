@@ -119,3 +119,16 @@ export const contact = {
   chips: ["Un docente decide", "Privacidad por diseño", "Respaldo de UNER y UNAM"],
   closing: "Bienvenidos a Synapxix.",
 };
+
+// Instituciones que se muestran alrededor del logo en el hero (nombres tal como figuran en la presentación).
+// `mono` es el monograma que se dibuja en la tarjeta hasta contar con los logos oficiales.
+export const unis: { mono: string; name: string }[] = [
+  { mono: "UNER", name: "Universidad Nacional de Entre Ríos" },
+  { mono: "UNAM", name: "UNAM, México" },
+  { mono: "UADER", name: "UADER" },
+  { mono: "UTN", name: "UTN" },
+  { mono: "UCU", name: "Universidad de Concepción del Uruguay" },
+  { mono: "UMNG", name: "Universidad Militar Nueva Granada" },
+  { mono: "PG", name: "Politécnico Grancolombiano" },
+  { mono: "LN", name: "Polo Tecnológico La Nube" },
+];

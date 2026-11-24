@@ -54,10 +54,23 @@ check(!/why__card--violeta[^{]*\{[^}]*background:\s*var\(--violeta\)\s*[;}]/.tes
   const texto = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   check(h2s.some((s) => texto(s) === 'El momento de sumar la IA a la educación'), 'el título dividido debe conservar el texto completo y legible');
 }
-// Hero: tarjeta foil 2.5D con el logo
-check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 2, 'debe haber 2 tarjetas interactivas: una en el hero y otra en el contacto');
-check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 2, 'cada tarjeta debe exponer una descripción accesible');
-check(has('hstage--noche') && has('hstage--violeta'), 'la tarjeta del hero debe ser azul noche y la del contacto violeta (que combine con su fondo)');
+// Tarjeta foil 2.5D: ahora solo en el contacto (el hero tiene la animación de arranque)
+check((html.match(/<div[^>]*\sdata-foil-card[\s>]/g) ?? []).length === 1, 'debe quedar 1 sola tarjeta interactiva (la del contacto)');
+check((html.match(/aria-label="Tarjeta[^"]+"/g) ?? []).length === 1, 'la tarjeta debe exponer una descripción accesible');
+check(has('hstage--violeta'), 'la tarjeta del contacto debe ser violeta (que combine con su fondo)');
+// Hero: animación de arranque (anillo -> logo -> texto -> instituciones alrededor)
+{
+  const hero = (html.match(/<section[^>]*class="hero[^"]*"[\s\S]*?<\/section>/) ?? [''])[0];
+  check(hero.length > 0, 'debe existir la sección del hero');
+  check(/data-hero/.test(hero) && /class="hero__ring"/.test(hero) && /class="hero__tile"/.test(hero), 'el hero debe tener el anillo de carga y la pieza del logo');
+  check((hero.match(/<li[^>]*class="uni"/g) ?? []).length === 8, 'el hero debe mostrar las 8 instituciones alrededor del logo');
+  check(/aria-label="Universidades[^"]*"/.test(hero), 'la lista de instituciones del hero debe tener nombre accesible');
+  check(!/data-foil-card/.test(hero), 'la tarjeta foil ya no va en el hero');
+  const plano = hero.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  for (const n of ['Universidad Nacional de Entre Ríos', 'UNAM, México', 'UADER', 'UTN', 'Universidad de Concepción del Uruguay', 'Universidad Militar Nueva Granada', 'Politécnico Grancolombiano', 'Polo Tecnológico La Nube'])
+    check(plano.includes(n), `el hero debe nombrar a "${n}"`);
+  check(plano.includes('Educación personalizada con juego e inteligencia artificial'), 'el hero conserva su título');
+}
 check(has('dataset.tone') && (html.match(/<section[^>]*\sdata-nav="/g) ?? []).length === 2, 'la barra debe tomar el color de D.A.L.A. (noche) y del contacto (violeta): 2 secciones con data-nav');
 // D.A.L.A.: 6 filas desplegables nativas (<details>/<summary>), con respuesta animada por script
 check((html.match(/<details[^>]*class="dala__row[^"]*"/g) ?? []).length === 6, 'los 6 pasos de D.A.L.A. deben ser filas <details> nativas');
