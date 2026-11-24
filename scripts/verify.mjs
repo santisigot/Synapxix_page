@@ -140,6 +140,23 @@ check(has('Un docente decide'), 'falta "Un docente decide"');
   check(pos.every((p, i) => p >= 0 && (i === 0 || p > pos[i - 1])), 'los 6 pasos de D.A.L.A. faltan o están desordenados');
 }
 
+// Todo el sitio en colores planos: ningún degradado ni brillo difuso (se ve "demasiado IA")
+{
+  function* archivos(dir) {
+    for (const f of readdirSync(dir, { withFileTypes: true })) {
+      const p = `${dir}/${f.name}`;
+      if (f.isDirectory()) yield* archivos(p);
+      else yield p;
+    }
+  }
+  const prohibidos = [[/gradient\(/i, 'degradado'], [/filter:\s*blur\(/, 'brillo difuso (filter: blur)']];
+  for (const f of archivos('src')) {
+    if (!/\.(astro|css|ts)$/.test(f)) continue;
+    const txt = readFileSync(f, 'utf8');
+    for (const [re, nombre] of prohibidos) check(!re.test(txt), `${f.replace(/\\/g, '/')}: usa ${nombre}`);
+  }
+}
+
 if (failures.length) {
   console.error('verify: FALLÓ\n - ' + failures.join('\n - '));
   process.exit(1);

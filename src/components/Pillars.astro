@@ -57,9 +57,7 @@ const tonos = ["cielo", "lavanda", "violeta", "cielo"];
   .pillars[data-reel="on"] { padding: 0; scroll-margin-top: -88px; }
   .pillars[data-reel="on"] .pillars__stage { position: relative; height: 100vh; height: 100svh; overflow: hidden; overflow: clip; display: grid; place-items: center; user-select: none; -webkit-user-select: none; }
   .pillars[data-reel="on"] .pillars__paper { display: block; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(70% 55% at 50% 42%, rgba(255, 255, 255, 0.95), transparent 70%),
-                radial-gradient(rgba(16, 46, 74, 0.09) 1px, transparent 1.3px);
-    background-size: auto, 6px 6px; }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Ccircle cx='3.0' cy='3.0' r='0.6' fill='%23102e4a' fill-opacity='0.14'/%3E%3C/svg%3E"); background-size: 6px 6px; }
   /* El título va arriba, sobre las tarjetas, para que se lea bien */
   .pillars[data-reel="on"] .pillars__head { position: absolute; inset: 0 0 auto 0; z-index: 1; display: grid; justify-items: center; align-content: start; gap: 10px; padding-top: clamp(92px, 12svh, 140px); text-align: center; pointer-events: none; margin: 0; width: 100%; }
   .pillars[data-reel="on"] .pillars__h2 { font-size: clamp(3rem, 7.2vw, 7rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; color: var(--noche); }

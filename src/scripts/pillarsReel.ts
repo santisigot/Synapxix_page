@@ -10,10 +10,11 @@
 type Tono = "cielo" | "lavanda" | "violeta";
 type Pilar = { n: string; title: string; text: string; tono: Tono };
 
-const FONDOS: Record<Tono, [string, string]> = {
-  cielo: ["#eaf7ff", "#cdeaff"],
-  lavanda: ["#f4eeff", "#ddd1ff"],
-  violeta: ["#eeebff", "#d4cdff"],
+// Colores planos de las portadas (los tonos suaves de la paleta)
+const FONDOS: Record<Tono, string> = {
+  cielo: "#dff2ff",
+  lavanda: "#ece4ff",
+  violeta: "#e4e0ff",
 };
 
 // Medidas del plano y de la pista (en unidades de la escena, antes de escalar a la pantalla)
@@ -357,12 +358,7 @@ function dibujar(p: Pilar, logo: HTMLImageElement | null): HTMLCanvasElement {
   c.width = W;
   c.height = H;
   const g = c.getContext("2d")!;
-  const [a, b] = FONDOS[p.tono];
-
-  const fondo = g.createLinearGradient(0, 0, W, H);
-  fondo.addColorStop(0, a);
-  fondo.addColorStop(1, b);
-  g.fillStyle = fondo;
+  g.fillStyle = FONDOS[p.tono];
   g.fillRect(0, 0, W, H);
 
   // círculos concéntricos detrás del logo

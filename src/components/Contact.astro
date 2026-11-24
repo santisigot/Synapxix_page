@@ -8,8 +8,6 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
 ---
 <section class="contact" id="contacto" data-nav="violeta">
   <div class="contact__bg" aria-hidden="true">
-    <span class="contact__glow contact__glow--a"></span>
-    <span class="contact__glow contact__glow--b"></span>
     <span class="contact__dots"></span>
   </div>
 
@@ -37,10 +35,7 @@ const asunto = encodeURIComponent("Quiero sumar mi escuela a Synapxix");
     /* Como el hero: ocupa toda la pantalla al llegar. El margen negativo anula el scroll-padding de la barra para que el borde superior quede exacto. */
     display: grid; align-content: center; min-height: 100vh; min-height: 100svh; scroll-margin-top: -88px; padding: 120px 0 56px; }
   .contact__bg { position: absolute; inset: 0; pointer-events: none; }
-  .contact__glow { position: absolute; border-radius: 50%; filter: blur(90px); }
-  .contact__glow--a { width: 480px; height: 480px; background: var(--lavanda); opacity: 0.4; top: -200px; right: -100px; }
-  .contact__glow--b { width: 420px; height: 420px; background: var(--cielo); opacity: 0.35; bottom: -220px; right: 18%; }
-  .contact__dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1.5px, transparent 1.5px); background-size: 30px 30px; mask-image: linear-gradient(100deg, transparent 30%, #000 100%); }
+  .contact__dots { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Ccircle cx='15.0' cy='15.0' r='1.5' fill='white' fill-opacity='0.16'/%3E%3C/svg%3E"); background-size: 30px 30px; }
 
   .contact__grid { position: relative; display: grid; gap: 56px; align-items: center; }
   .contact__copy { display: grid; gap: 22px; justify-items: start; }
